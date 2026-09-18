@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090b0f">
+<title>LOCK IN — Kun tartibi</title>
+<meta name="description" content="LOCK IN — kunlik intizom, namoz, zal va ertalabki mashg‘ulot kuzatuvchisi.">
+<style>
+:root{color-scheme:dark;--bg:#080a0e;--panel:#11151c;--panel2:#151a23;--line:#ffffff14;--text:#f5f7fb;--muted:#9299a8;--accent:#96ff6a;--good:#77e7a0;--warn:#f3ca62;--bad:#ff7a7a;--r:20px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#6eff8910,transparent 28%),radial-gradient(circle at 90% 10%,#6a8dff10,transparent 26%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,select{font:inherit;color:inherit}.app{width:min(1400px,calc(100% - 32px));margin:auto;padding:24px 0 48px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}.brand{display:flex;gap:12px;align-items:center}.mark{width:48px;height:48px;border-radius:14px;background:var(--accent);color:#091009;display:grid;place-items:center;font-weight:900}.eyebrow{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.13em;text-transform:uppercase}.brand h1{margin:2px 0 0;font-size:28px}.clock{border:1px solid var(--line);background:#0d1016d9;border-radius:16px;padding:12px 15px;min-width:245px}.clock .row{display:flex;gap:8px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);margin-top:4px}.time{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums}.date{font-size:12px;color:var(--muted)}
+.panel{border:1px solid var(--line);background:linear-gradient(180deg,#ffffff05,transparent 34%),#10131ae6;border-radius:var(--r);box-shadow:0 22px 60px #0005}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:16px}.heroCopy{padding:22px}.heroCopy h2{font-size:clamp(28px,4vw,48px);line-height:1.02;margin:6px 0}.muted{color:var(--muted)}.progressMeta{display:flex;justify-content:space-between;margin-top:22px;font-size:13px}.track{height:9px;background:#ffffff0d;border-radius:999px;overflow:hidden;margin-top:7px}.bar{height:100%;width:0;background:var(--accent);transition:.25s}
+.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{border:1px solid var(--line);background:var(--panel2);border-radius:18px;padding:16px;min-height:88px;display:flex;align-items:center;gap:12px}.ico{width:38px;height:38px;border-radius:11px;background:#ffffff0b;display:grid;place-items:center;color:var(--accent);font-weight:900}.card small{display:block;color:var(--muted)}.card strong{font-size:18px}
+.grid{display:grid;grid-template-columns:minmax(360px,.82fr) minmax(0,1.18fr);gap:16px}.stack{display:grid;gap:16px}.pad{padding:18px}.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:15px}.head h3{margin:4px 0 0}.btns{display:flex;gap:6px}.btn,.icon{border:1px solid var(--line);background:#ffffff08;border-radius:10px;cursor:pointer}.btn{padding:8px 11px;font-weight:800;font-size:12px}.icon{width:34px;height:34px}.week,.cal{display:grid;grid-template-columns:repeat(7,1fr)}.week div{text-align:center;color:var(--muted);font-size:11px;font-weight:800;padding:6px 0}.cal{gap:6px}.day{position:relative;min-height:48px;border:1px solid transparent;background:#ffffff05;border-radius:11px;cursor:pointer;text-align:left;padding:8px;font-weight:800}.day.out{opacity:.32}.day.today{border-color:#96ff6a55}.day.sel{background:#96ff6a1a;border-color:#96ff6a88}.dayDot{position:absolute;bottom:7px;left:8px;width:6px;height:6px;border-radius:50%;background:var(--warn)}.dayDot.ok{background:var(--good)}
+.scheduleTitle{display:flex;justify-content:space-between;gap:8px}.toggles{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:9px}.toggle{border:1px solid var(--line);background:#ffffff06;color:var(--muted);border-radius:10px;min-height:36px;font-size:11px;font-weight:900;cursor:pointer}.toggle.on{background:var(--accent);color:#081008;border-color:var(--accent)}.divider{height:1px;background:var(--line);margin:16px 0}
+.select{width:100%;background:#12161e;border:1px solid var(--line);border-radius:11px;padding:10px 12px}.source{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:10px 0}.badge{font-size:11px;color:var(--muted);border:1px solid var(--line);background:#ffffff06;border-radius:999px;padding:6px 9px}.prayers{display:grid;gap:8px}.prayer{display:grid;grid-template-columns:1fr auto minmax(330px,1.2fr);gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px;background:#ffffff04}.prayer small{display:block;color:var(--muted)}.ptime{font-weight:900}.statuses{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.status{border:1px solid var(--line);background:#ffffff06;color:var(--muted);border-radius:9px;min-height:34px;padding:5px;font-size:11px;font-weight:800;cursor:pointer}.status.sel.good{background:var(--good);color:#07110a}.status.sel.warn{background:var(--warn);color:#141005}.status.sel.bad{background:var(--bad);color:#160606}.status.sel.neutral{background:#3b414d;color:white}.status:disabled{opacity:.3;cursor:not-allowed}
+.trackers{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.tracker{padding:18px}.trackerTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.trackerTop h3{margin:4px 0}.tracker .statuses{grid-template-columns:repeat(3,1fr);margin-top:12px}.plan{color:var(--muted);font-size:12px;margin-top:8px}
+@media(max-width:980px){.hero,.grid{grid-template-columns:1fr}.prayer{grid-template-columns:1fr auto}.prayer .statuses{grid-column:1/-1}.trackers{grid-template-columns:1fr}}@media(max-width:650px){.app{width:min(100% - 18px,1400px);padding-top:12px}.top{align-items:stretch;flex-direction:column}.clock{min-width:0}.summary{grid-template-columns:1fr 1fr}.head{flex-direction:column}.prayer{grid-template-columns:1fr auto}.statuses{grid-template-columns:1fr 1fr}.toggles{gap:4px}.toggle{font-size:10px}.card{padding:12px;min-height:76px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="top">
+  <div class="brand"><div class="mark">LI</div><div><div class="eyebrow">Personal discipline system</div><h1>LOCK IN</h1></div></div>
+  <div class="clock"><div class="row"><span class="dot"></span><span id="locationLabel">Namangan</span><span>UTC+5</span></div><div id="liveClock" class="time">00:00:00</div><div id="liveDate" class="date">—</div></div>
+</header>
+<section class="hero">
+  <div class="panel heroCopy"><div class="eyebrow">Bugungi fokus</div><h2 id="heroTitle">Bugunni boshqar. Keyin natija keladi.</h2><div id="selectedDate" class="muted">—</div><div class="progressMeta"><span>Kunlik bajarilish</span><strong id="overallPct">0%</strong></div><div class="track"><div id="overallBar" class="bar"></div></div></div>
+  <div class="summary">
+    <div class="card"><div class="ico">☾</div><div><small>Namoz</small><strong id="sumPrayer">0/5</strong></div></div>
+    <div class="card"><div class="ico">▰</div><div><small>Zal</small><strong id="sumGym">Rejasiz</strong></div></div>
+    <div class="card"><div class="ico">↗</div><div><small>Ertalab</small><strong id="sumMorning">Rejasiz</strong></div></div>
+    <div class="card"><div class="ico">%</div><div><small>Umumiy</small><strong id="sumOverall">0%</strong></div></div>
+  </div>
+</section>
+<section class="grid">
+  <div class="stack">
+    <section class="panel pad">
+      <div class="head"><div><div class="eyebrow">Kalendar</div><h3 id="calTitle">—</h3></div><div class="btns"><button id="prev" class="icon">←</button><button id="today" class="btn">Bugun</button><button id="next" class="icon">→</button></div></div>
+      <div id="week" class="week"></div><div id="cal" class="cal"></div>
+    </section>
+    <section class="panel pad">
+      <div class="eyebrow">Haftalik sozlamalar</div>
+      <div style="margin-top:12px"><div class="scheduleTitle"><strong>Zal kunlari</strong><span id="gymCount" class="muted"></span></div><div id="gymSchedule" class="toggles"></div></div>
+      <div class="divider"></div>
+      <div><div class="scheduleTitle"><strong>Ertalabgi mashg‘ulot</strong><span id="morningCount" class="muted"></span></div><div id="morningSchedule" class="toggles"></div></div>
+    </section>
+  </div>
+  <div class="stack">
+    <section class="panel pad">
+      <div class="head"><div><div class="eyebrow">Namozlar</div><h3>Kunlik 5 mahal</h3></div><div style="min-width:240px"><label class="eyebrow" for="region">Hudud</label><select id="region" class="select"></select></div></div>
+      <div class="source"><span id="source" class="badge">Vaqtlar yuklanmoqda…</span><button id="retry" class="btn">Yangilash</button></div>
+      <div id="prayers" class="prayers"></div>
+    </section>
+    <section class="trackers">
+      <div class="panel tracker"><div class="trackerTop"><div><div class="eyebrow">Zal</div><h3>Davomat</h3></div><strong id="gymWeek">0/0 hafta</strong></div><div id="gymPlan" class="plan"></div><div id="gymStatus" class="statuses"></div></div>
+      <div class="panel tracker"><div class="trackerTop"><div><div class="eyebrow">Ertalabgi qo‘shimcha mashg‘ulot</div><h3>Intizom</h3></div><strong id="morningWeek">0/0 hafta</strong></div><div id="morningPlan" class="plan"></div><div id="morningStatus" class="statuses"></div></div>
+    </section>
+  </div>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var KEY="lock-in:v1";
+var DEFAULT={version:1,region:"Namangan",gymSchedule:[1,3,5],morningSchedule:[2,4,6],dayData:{}};
+var MONTHS=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+var WD=["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"];
+var WDS=["Dush","Sesh","Chor","Pay","Jum","Shan","Yak"];
+var REGIONS={"Toshkent shahri":[41.2995,69.2401],"Toshkent viloyati":[41.0167,69.35],"Andijon":[40.7821,72.3442],"Buxoro":[39.7681,64.4556],"Farg‘ona":[40.3894,71.787],"Jizzax":[40.125,67.8808],"Namangan":[40.9983,71.6726],"Navoiy":[40.1039,65.3688],"Qashqadaryo":[38.8606,65.7891],"Qoraqalpog‘iston":[42.46,59.615],"Samarqand":[39.6542,66.9597],"Sirdaryo":[40.8436,68.6617],"Surxondaryo":[37.2242,67.2783],"Xorazm":[41.55,60.6333]};
+var PR=[["fajr","Bomdod","Fajr"],["dhuhr","Peshin","Dhuhr"],["asr","Asr","Asr"],["maghrib","Shom","Maghrib"],["isha","Xufton","Isha"]];
+var PSTATUS=[["unset","Belgilanmagan","neutral"],["done","O‘qildi","good"],["late","Kechiktirib o‘qildi","warn"],["missed","O‘qilmadi","bad"]];
+var GSTATUS=[["unset","Belgilanmagan","neutral"],["done","Chiqildi","good"],["missed","Chiqilmadi","bad"]];
+var MSTATUS=[["unset","Belgilanmagan","neutral"],["done","Qildim","good"],["missed","Qilolmadim","bad"]];
+var state=load(),selected=start(new Date()),cursor=new Date(selected.getFullYear(),selected.getMonth(),1),times=null,token=0;
+function q(id){return document.getElementById(id)}
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function load(){try{var x=JSON.parse(localStorage.getItem(KEY)||"null");return x&&x.version===1?Object.assign(clone(DEFAULT),x,{dayData:x.dayData||{}}):clone(DEFAULT)}catch(e){return clone(DEFAULT)}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function start(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function iso(d){return d.getDay()===0?7:d.getDay()}
+function same(a,b){return key(a)===key(b)}
+function pretty(d){return d.getDate()+"-"+MONTHS[d.getMonth()]+", "+d.getFullYear()+" • "+WD[d.getDay()]}
+function monthTitle(d){var m=MONTHS[d.getMonth()];return m.charAt(0).toUpperCase()+m.slice(1)+" "+d.getFullYear()}
+function getDay(k){return state.dayData[k]||{prayers:{},gym:"unset",morning:"unset"}}
+function ensure(k){if(!state.dayData[k])state.dayData[k]={prayers:{},gym:"unset",morning:"unset"};if(!state.dayData[k].prayers)state.dayData[k].prayers={};return state.dayData[k]}
+function renderWeek(){q("week").innerHTML=WDS.map(function(x){return "<div>"+x+"</div>"}).join("")}
+function renderRegions(){q("region").innerHTML=Object.keys(REGIONS).map(function(x){return "<option>"+x+"</option>"}).join("");q("region").value=state.region}
+function renderSchedule(id,prop){var box=q(id);box.innerHTML="";for(var i=1;i<=7;i++){(function(day){var b=document.createElement("button");b.className="toggle "+(state[prop].indexOf(day)>=0?"on":"");b.textContent=WDS[day-1];b.onclick=function(){var a=state[prop];state[prop]=a.indexOf(day)>=0?a.filter(function(x){return x!==day}):a.concat([day]).sort();save();renderAll(false)};box.appendChild(b)})(i)}}
+function trackState(d){var data=getDay(key(d)),marked=0,positive=0,expected=5;PR.forEach(function(p){var s=data.prayers[p[0]]||"unset";if(s!=="unset")marked++;if(s==="done"||s==="late")positive++});if(state.gymSchedule.indexOf(iso(d))>=0){expected++;if(data.gym!=="unset")marked++;if(data.gym==="done")positive++}if(state.morningSchedule.indexOf(iso(d))>=0){expected++;if(data.morning!=="unset")marked++;if(data.morning==="done")positive++}if(!marked)return null;return positive===expected?"ok":"part"}
+function renderCal(){q("calTitle").textContent=monthTitle(cursor);var box=q("cal");box.innerHTML="";var y=cursor.getFullYear(),m=cursor.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,gs=new Date(y,m,1-offset),today=start(new Date());for(var i=0;i<42;i++){(function(d){var b=document.createElement("button"),t=trackState(d);b.className="day "+(d.getMonth()!==m?"out ":"")+(same(d,today)?"today ":"")+(same(d,selected)?"sel ":"");b.innerHTML="<span>"+d.getDate()+"</span>"+(t?"<span class='dayDot "+(t==="ok"?"ok":"")+"'></span>":"");b.onclick=function(){selected=start(d);if(selected.getMonth()!==cursor.getMonth()||selected.getFullYear()!==cursor.getFullYear())cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)};box.appendChild(b)})(new Date(gs.getFullYear(),gs.getMonth(),gs.getDate()+i))}}
+function makeStatuses(box,arr,current,onchange,disabled){box.innerHTML="";arr.forEach(function(s){var b=document.createElement("button");b.className="status "+(current===s[0]?"sel "+s[2]:"");b.textContent=s[1];b.disabled=!!disabled;b.onclick=function(){onchange(s[0])};box.appendChild(b)})}
+function renderPrayers(){var d=getDay(key(selected)),box=q("prayers");box.innerHTML="";PR.forEach(function(p){var row=document.createElement("div"),time=times&&times[p[2]]?times[p[2]]:"—:—";row.className="prayer";row.innerHTML="<div><strong>"+p[1]+"</strong><small>"+(times?"Tanlangan kun vaqti":"Vaqt yuklanmoqda")+"</small></div><div class='ptime'>"+time+"</div><div class='statuses'></div>";makeStatuses(row.querySelector(".statuses"),PSTATUS,d.prayers[p[0]]||"unset",function(v){ensure(key(selected)).prayers[p[0]]=v;save();renderAll(false)},false);box.appendChild(row)})}
+function monday(d){var x=start(d);x.setDate(x.getDate()-(iso(x)-1));return x}
+function weekly(kind){var st=monday(selected),sch=kind==="gym"?state.gymSchedule:state.morningSchedule,done=0,planned=0;for(var i=0;i<7;i++){var d=new Date(st);d.setDate(st.getDate()+i);if(sch.indexOf(iso(d))<0)continue;planned++;if(getDay(key(d))[kind]==="done")done++}return [done,planned]}
+function label(val,arr){for(var i=0;i<arr.length;i++)if(arr[i][0]===val)return arr[i][1];return "Belgilanmagan"}
+function stats(){var d=getDay(key(selected)),p=0;PR.forEach(function(x){if(d.prayers[x[0]]==="done"||d.prayers[x[0]]==="late")p++});var gp=state.gymSchedule.indexOf(iso(selected))>=0,mp=state.morningSchedule.indexOf(iso(selected))>=0,exp=5+(gp?1:0)+(mp?1:0),done=p+(gp&&d.gym==="done"?1:0)+(mp&&d.morning==="done"?1:0);return{d:d,p:p,gp:gp,mp:mp,pct:Math.round(done/exp*100)}}
+function renderSummary(){var s=stats(),today=same(selected,start(new Date()));q("heroTitle").textContent=today?"Bugunni boshqar. Keyin natija keladi.":"Tanlangan kunni aniq kuzat.";q("selectedDate").textContent=pretty(selected);q("sumPrayer").textContent=s.p+"/5";q("sumGym").textContent=s.gp?label(s.d.gym,GSTATUS):"Rejasiz";q("sumMorning").textContent=s.mp?label(s.d.morning,MSTATUS):"Rejasiz";q("sumOverall").textContent=s.pct+"%";q("overallPct").textContent=s.pct+"%";q("overallBar").style.width=s.pct+"%"}
+function renderTrackers(){var d=getDay(key(selected)),dow=iso(selected),gp=state.gymSchedule.indexOf(dow)>=0,mp=state.morningSchedule.indexOf(dow)>=0,gw=weekly("gym"),mw=weekly("morning");q("gymPlan").textContent=gp?WD[selected.getDay()]+" — zal kuni rejalashtirilgan.":"Bu kun uchun zal rejalashtirilmagan.";makeStatuses(q("gymStatus"),GSTATUS,d.gym||"unset",function(v){ensure(key(selected)).gym=v;save();renderAll(false)},!gp);q("morningPlan").textContent=mp?WD[selected.getDay()]+" — ertalabgi mashg‘ulot rejalashtirilgan.":"Bu kun uchun ertalabgi qo‘shimcha mashg‘ulot rejalashtirilmagan.";makeStatuses(q("morningStatus"),MSTATUS,d.morning||"unset",function(v){ensure(key(selected)).morning=v;save();renderAll(false)},!mp);q("gymWeek").textContent=gw[0]+"/"+gw[1]+" hafta";q("morningWeek").textContent=mw[0]+"/"+mw[1]+" hafta"}
+async function prayerFetch(){var my=++token,c=REGIONS[state.region]||REGIONS.Namangan,d=selected,path=String(d.getDate()).padStart(2,"0")+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+d.getFullYear();times=null;q("source").textContent="Vaqtlar yuklanmoqda…";renderPrayers();try{var res=await fetch("https://api.aladhan.com/v1/timings/"+path+"?latitude="+c[0]+"&longitude="+c[1]+"&method=3&school=1");if(!res.ok)throw new Error();var json=await res.json();if(my!==token)return;times=json.data.timings;q("source").textContent="Hisoblangan vaqt · AlAdhan · Hanafi Asr";renderPrayers()}catch(e){if(my!==token)return;q("source").textContent="Vaqtlarni olishda xatolik. Internetni tekshiring.";renderPrayers()}}
+function clock(){var now=new Date(),tf=new Intl.DateTimeFormat("uz-UZ",{timeZone:"Asia/Tashkent",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}),p=new Intl.DateTimeFormat("uz-UZ",{timeZone:"Asia/Tashkent",year:"numeric",month:"numeric",day:"numeric",weekday:"long"}).formatToParts(now),map={};p.forEach(function(x){map[x.type]=x.value});q("liveClock").textContent=tf.format(now);q("liveDate").textContent=map.day+"-"+MONTHS[Math.max(0,Number(map.month)-1)]+", "+map.year+" • "+(map.weekday||"")}
+function renderAll(refetch){q("locationLabel").textContent=state.region;renderCal();renderSchedule("gymSchedule","gymSchedule");renderSchedule("morningSchedule","morningSchedule");q("gymCount").textContent=state.gymSchedule.length+" kun / hafta";q("morningCount").textContent=state.morningSchedule.length+" kun / hafta";renderPrayers();renderTrackers();renderSummary();if(refetch)prayerFetch()}
+q("prev").onclick=function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);renderCal()};q("next").onclick=function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1);renderCal()};q("today").onclick=function(){selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)};q("region").onchange=function(){state.region=this.value;save();renderAll(true)};q("retry").onclick=prayerFetch;
+renderWeek();renderRegions();clock();setInterval(clock,1000);renderAll(true);
+})();
+</script>
+</body>
+</html>
