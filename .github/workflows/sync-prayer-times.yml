@@ -1,0 +1,53 @@
+name: Sync namozvaqti.uz prayer times
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/update_prayer_times.py"
+      - ".github/workflows/sync-prayer-times.yml"
+  schedule:
+    # 00:20 Asia/Tashkent (UTC+5)
+    - cron: "20 19 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prayer-times-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Fetch namozvaqti.uz monthly tables
+        run: python scripts/update_prayer_times.py
+
+      - name: Commit refreshed prayer times
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/prayer-times.json
+          if git diff --cached --quiet; then
+            echo "Prayer times unchanged."
+          else
+            git commit -m "Update prayer times from namozvaqti.uz"
+            git push
+          fi
