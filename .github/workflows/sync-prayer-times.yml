@@ -49,5 +49,6 @@ jobs:
             echo "Prayer times unchanged."
           else
             git commit -m "Update prayer times from namozvaqti.uz"
-            git push
+            git pull --rebase origin main
+            git push origin main
           fi
