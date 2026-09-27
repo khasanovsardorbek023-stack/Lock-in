@@ -235,7 +235,7 @@ button{touch-action:manipulation}
         <div id="week" class="week"></div><div id="cal" class="cal"></div>
       </section>
       <div id="quickActions" class="quickActions">
-        <button id="scheduleBtn" class="quickBtn" type="button">Odatlar kunlarini sozlash</button>
+        <button id="scheduleBtn" class="quickBtn" type="button">Odat va diet kunlarini sozlash</button>
         <button id="addHabitBtn" class="quickBtn" type="button">Odat qo‘shish</button>
         <button id="addDietBtn" class="quickBtn" type="button">Diet qo‘shish</button>
       </div>
@@ -433,16 +433,14 @@ async function openPrayerModal(){
 }
 function openCoreModal(kind){
   var isGym=kind==="gym",title=isGym?"GYM":"MORNING WORKOUT",schedule=isGym?state.gymSchedule:state.morningSchedule,active=coreIsActive(kind),data=getDay(key(selected)),current=data[kind]||"unset",planned=coreActiveOn(kind,selected)&&schedule.indexOf(iso(selected))>=0;
-  openModal(title+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+title+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="activeSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Hafta kunlari</div><div id="coreDays"></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="coreStatus"></div></div>');
+  openModal(title+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+title+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="activeSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="coreStatus"></div></div>');
   q("activeSwitch").addEventListener("click",function(){if(isGym)state.gymActivePeriods=togglePeriods(state.gymActivePeriods);else state.morningActivePeriods=togglePeriods(state.morningActivePeriods);save();openCoreModal(kind);renderAll(false)});
-  q("coreDays").appendChild(daysEditor(schedule,function(n){if(isGym)state.gymSchedule=n;else state.morningSchedule=n;save();openCoreModal(kind)}));
   var st=statusButtons(current,false,function(v){ensure(key(selected))[kind]=v;save();openCoreModal(kind);renderAll(false)});if(!planned)Array.from(st.children).forEach(function(b){b.disabled=true});q("coreStatus").appendChild(st)
 }
 function openItemModal(type,item){
   var field=type==="diet"?"diets":"habits",active=itemIsActive(item),planned=itemActiveOn(item,selected)&&item.schedule.indexOf(iso(selected))>=0,current=(getDay(key(selected))[field]||{})[item.id]||"unset";
-  openModal(item.name+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+item.name+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="itemSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Hafta kunlari</div><div id="itemDays"></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="itemStatus"></div></div><div class="modalActions"><button id="deleteItem" class="btn danger" type="button">O‘chirish</button></div>');
+  openModal(item.name+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+item.name+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="itemSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="itemStatus"></div></div><div class="modalActions"><button id="deleteItem" class="btn danger" type="button">O‘chirish</button></div>');
   q("itemSwitch").addEventListener("click",function(){item.activePeriods=togglePeriods(item.activePeriods||[]);save();openItemModal(type,item);renderAll(false)});
-  q("itemDays").appendChild(daysEditor(item.schedule.slice(),function(n){item.schedule=n;save();openItemModal(type,item)}));
   var st=statusButtons(current,false,function(v){ensure(key(selected))[field][item.id]=v;save();openItemModal(type,item);renderAll(false)});if(!planned)Array.from(st.children).forEach(function(b){b.disabled=true});q("itemStatus").appendChild(st);
   q("deleteItem").addEventListener("click",function(){if(!confirm("“"+item.name+"” ni o‘chirasizmi?"))return;var arr=type==="diet"?state.diets:state.habits;if(type==="diet")state.diets=arr.filter(function(x){return x.id!==item.id});else state.habits=arr.filter(function(x){return x.id!==item.id});Object.keys(state.dayData).forEach(function(k){var dd=state.dayData[k]&&state.dayData[k][field];if(dd)delete dd[item.id]});save();closeModal();renderAll(false)})
 }
@@ -453,10 +451,14 @@ function openAddModal(type){
   draw();q("saveNew").addEventListener("click",function(){var name=q("newName").value.trim();if(!name)return q("newName").focus();if(!draft.length)return alert("Kamida bitta hafta kunini tanlang.");var td=key(start(new Date())),obj={id:uuid(),name:name,schedule:draft.slice(),createdAt:td,activePeriods:[{start:td,end:null}]};if(type==="diet")state.diets.push(obj);else state.habits.push(obj);save();closeModal();renderAll(false)})
 }
 function openScheduleModal(){
-  openModal("Odatlar kunlarini sozlash",'<div id="scheduleList" class="scheduleList"></div>');
-  var list=q("scheduleList");
-  function addRow(name,schedule,onChange){var row=document.createElement("div");row.className="scheduleItem";row.innerHTML='<div class="scheduleName"></div><div class="daysHost"></div>';row.querySelector(".scheduleName").textContent=name;row.querySelector(".daysHost").appendChild(daysEditor(schedule.slice(),function(n){onChange(n);save();openScheduleModal();renderAll(false)}));list.appendChild(row)}
-  addRow("GYM",state.gymSchedule,function(n){state.gymSchedule=n});addRow("MORNING WORKOUT",state.morningSchedule,function(n){state.morningSchedule=n});state.habits.forEach(function(h){addRow(h.name,h.schedule,function(n){h.schedule=n})})
+  openModal("Odat va diet kunlarini sozlash",'<div class="modalSection"><div class="sectionTitle">Odatlar</div><div id="habitScheduleList" class="scheduleList"></div></div><div class="modalSection"><div class="sectionTitle">Diet</div><div id="dietScheduleList" class="scheduleList"></div></div>');
+  function addRow(host,name,schedule,onChange){var row=document.createElement("div");row.className="scheduleItem";row.innerHTML='<div class="scheduleName"></div><div class="daysHost"></div>';row.querySelector(".scheduleName").textContent=name;row.querySelector(".daysHost").appendChild(daysEditor(schedule.slice(),function(n){onChange(n);save();openScheduleModal();renderAll(false)}));host.appendChild(row)}
+  var habits=q("habitScheduleList"),diets=q("dietScheduleList");
+  addRow(habits,"GYM",state.gymSchedule,function(n){state.gymSchedule=n});
+  addRow(habits,"MORNING WORKOUT",state.morningSchedule,function(n){state.morningSchedule=n});
+  state.habits.forEach(function(h){addRow(habits,h.name,h.schedule,function(n){h.schedule=n})});
+  if(!state.diets.length)diets.innerHTML='<div class="rowMeta">Hali diet qo‘shilmagan.</div>';
+  else state.diets.forEach(function(h){addRow(diets,h.name,h.schedule,function(n){h.schedule=n})})
 }
 function rangeStats(from,to){
   var today=start(new Date()),end=key(to)>key(today)?today:to,done=0,planned=0,habitDone=0,habitPlanned=0,dietDone=0,dietPlanned=0,prayDone=0,prayPlanned=0;
