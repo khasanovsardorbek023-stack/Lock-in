@@ -3,230 +3,449 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090b0f">
-<title>LOCK IN — Kun tartibi</title>
-<meta name="description" content="LOCK IN — kunlik intizom, namoz, zal va ertalabki mashg‘ulot kuzatuvchisi.">
+<meta name="theme-color" content="#080b10">
+<title>LOCK IN — Personal Discipline System</title>
+<meta name="description" content="LOCK IN — shaxsiy intizom, namoz, odatlar va diet kuzatuvchisi.">
 <style>
-:root{color-scheme:dark;--bg:#080a0e;--panel:#11151c;--panel2:#151a23;--line:#ffffff14;--text:#f5f7fb;--muted:#9299a8;--accent:#96ff6a;--good:#77e7a0;--warn:#f3ca62;--bad:#ff7a7a;--r:20px}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#6eff8910,transparent 28%),radial-gradient(circle at 90% 10%,#6a8dff10,transparent 26%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,select,input{font:inherit;color:inherit}.app{width:min(1400px,calc(100% - 32px));margin:auto;padding:24px 0 48px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}.brand{display:flex;gap:12px;align-items:center}.mark{width:48px;height:48px;border-radius:14px;background:var(--accent);color:#091009;display:grid;place-items:center;font-weight:900}.eyebrow{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.13em;text-transform:uppercase}.brand h1{margin:2px 0 0;font-size:28px}.clock{border:1px solid var(--line);background:#0d1016d9;border-radius:16px;padding:12px 15px;min-width:245px}.clock .row{display:flex;gap:8px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);margin-top:4px}.time{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums}.date{font-size:12px;color:var(--muted)}
-.panel{border:1px solid var(--line);background:linear-gradient(180deg,#ffffff05,transparent 34%),#10131ae6;border-radius:var(--r);box-shadow:0 22px 60px #0005}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:16px}.heroCopy{padding:22px}.heroCopy h2{font-size:clamp(28px,4vw,48px);line-height:1.02;margin:6px 0}.muted{color:var(--muted)}.progressMeta{display:flex;justify-content:space-between;margin-top:22px;font-size:13px}.track{height:9px;background:#ffffff0d;border-radius:999px;overflow:hidden;margin-top:7px}.bar{height:100%;width:0;background:var(--accent);transition:.25s}
-.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{border:1px solid var(--line);background:var(--panel2);border-radius:18px;padding:16px;min-height:88px;display:flex;align-items:center;gap:12px}.ico{width:38px;height:38px;border-radius:11px;background:#ffffff0b;display:grid;place-items:center;color:var(--accent);font-weight:900}.card small{display:block;color:var(--muted)}.card strong{font-size:18px}
-.grid{display:grid;grid-template-columns:minmax(360px,.82fr) minmax(0,1.18fr);gap:16px}.stack{display:grid;gap:16px}.pad{padding:18px}.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:15px}.head h3{margin:4px 0 0}.btns{display:flex;gap:6px}.btn,.icon{border:1px solid var(--line);background:#ffffff08;border-radius:10px;cursor:pointer}.btn{padding:8px 11px;font-weight:800;font-size:12px}.icon{width:34px;height:34px}.week,.cal{display:grid;grid-template-columns:repeat(7,1fr)}.week div{text-align:center;color:var(--muted);font-size:11px;font-weight:800;padding:6px 0}.cal{gap:6px}.day{position:relative;min-height:48px;border:1px solid transparent;background:#ffffff05;border-radius:11px;cursor:pointer;text-align:left;padding:8px;font-weight:800}.day.out{opacity:.32}.day.today{border-color:#96ff6a55}.day.sel{background:#96ff6a1a;border-color:#96ff6a88}.dayDot{position:absolute;bottom:7px;left:8px;width:6px;height:6px;border-radius:50%;background:var(--warn)}.dayDot.ok{background:var(--good)}
-.scheduleTitle{display:flex;justify-content:space-between;gap:8px}.toggles{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:9px}.toggle{border:1px solid var(--line);background:#ffffff06;color:var(--muted);border-radius:10px;min-height:36px;font-size:11px;font-weight:900;cursor:pointer}.toggle.on{background:var(--accent);color:#081008;border-color:var(--accent)}.divider{height:1px;background:var(--line);margin:16px 0}
-.select{width:100%;background:#12161e;border:1px solid var(--line);border-radius:11px;padding:10px 12px}.source{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:10px 0}.badge{font-size:11px;color:var(--muted);border:1px solid var(--line);background:#ffffff06;border-radius:999px;padding:6px 9px}.prayers{display:grid;gap:8px}.prayer{display:grid;grid-template-columns:1fr auto minmax(330px,1.2fr);gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px;background:#ffffff04}.prayer small{display:block;color:var(--muted)}.ptime{font-weight:900}.statuses{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.status{border:1px solid var(--line);background:#ffffff06;color:var(--muted);border-radius:9px;min-height:34px;padding:5px;font-size:11px;font-weight:800;cursor:pointer}.status.sel.good{background:var(--good);color:#07110a}.status.sel.warn{background:var(--warn);color:#141005}.status.sel.bad{background:var(--bad);color:#160606}.status.sel.neutral{background:#3b414d;color:white}.status:disabled{opacity:.3;cursor:not-allowed}
-.trackers{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.tracker{padding:18px}.tracker.paused{opacity:.75;border-style:dashed}.trackerTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.trackerTop h3{margin:4px 0}.trackerRight{display:flex;flex-direction:column;align-items:flex-end;gap:7px}.trackerState{display:inline-flex;align-items:center;font-size:10px;font-weight:900;border-radius:999px;padding:5px 8px;border:1px solid var(--line);margin-top:6px}.trackerState.active{background:var(--accent);border-color:var(--accent);color:#081008}.trackerState.paused{color:var(--warn);background:#f3ca6212;border-color:#f3ca6240}.tracker .statuses{grid-template-columns:repeat(3,1fr);margin-top:12px}.plan{color:var(--muted);font-size:12px;margin-top:8px}
-.habitsPanel{margin-top:16px}.habitForm{border:1px solid var(--line);background:#ffffff04;border-radius:16px;padding:16px;margin-bottom:14px}.habitForm.hidden{display:none}.formRow{display:grid;grid-template-columns:minmax(220px,1fr) auto;gap:12px;align-items:end}.field label{display:block;margin-bottom:7px}.input{width:100%;background:#12161e;border:1px solid var(--line);border-radius:11px;padding:11px 12px;color:var(--text);outline:none}.input:focus{border-color:#96ff6a88;box-shadow:0 0 0 3px #96ff6a12}.formActions{display:flex;gap:7px}.primary{background:var(--accent);color:#081008;border-color:var(--accent)}.habitList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.habitItem{border:1px solid var(--line);background:#ffffff04;border-radius:16px;padding:15px}.habitItemTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.habitItem h4{margin:3px 0 0;font-size:17px}.miniActions{display:flex;gap:5px}.miniBtn{border:1px solid var(--line);background:#ffffff06;color:var(--muted);border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800;cursor:pointer}.miniBtn.danger:hover{color:var(--bad);border-color:#ff7a7a55}.habitDays{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}.dayChip{font-size:10px;font-weight:900;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 7px}.dayChip.on{color:#081008;background:var(--accent);border-color:var(--accent)}.habitItem .statuses{grid-template-columns:repeat(3,1fr);margin-top:10px}.emptyHabits{border:1px dashed #ffffff20;border-radius:16px;padding:22px;text-align:center;color:var(--muted)}
-.analyticsPanel{margin-top:16px}.analyticsPanel.compact{padding:14px 18px}.analyticsToggleRow{display:flex;justify-content:space-between;gap:12px;align-items:center}.analyticsToggleRow h3{margin:4px 0 0}.analyticsBody{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}.analyticsBody.hidden{display:none}.rangeForm{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}.dateField label{display:block;margin-bottom:7px}.dateInput{width:100%;background:#12161e;border:1px solid var(--line);border-radius:11px;padding:10px 12px;color:var(--text);outline:none}.dateInput:focus{border-color:#96ff6a88;box-shadow:0 0 0 3px #96ff6a12}.rangeError{display:none;color:var(--bad);font-size:12px;margin-top:9px}.rangeError.show{display:block}.rangeResult{display:none;margin-top:14px}.rangeResult.show{display:block}.rangeHero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;border:1px solid var(--line);background:#ffffff04;border-radius:16px;padding:16px}.rangePct{font-size:42px;font-weight:900;line-height:1}.rangePeriod{font-size:12px;color:var(--muted);margin-top:5px}.breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.breakCard{border:1px solid var(--line);background:#ffffff04;border-radius:14px;padding:13px}.breakCard small{display:block;color:var(--muted);margin-bottom:5px}.breakCard strong{font-size:18px}.habitItem.paused{opacity:.72;border-style:dashed}.habitState{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:900;border:1px solid var(--line);border-radius:999px;padding:5px 8px;margin-top:7px}.habitState.active{color:#081008;background:var(--accent);border-color:var(--accent)}.habitState.paused{color:var(--warn);background:#f3ca6212;border-color:#f3ca6240}.miniBtn.pause{color:var(--warn)}.miniBtn.resume{color:var(--good)}
-.appLocked{display:none!important}.authGate{min-height:100vh;display:grid;place-items:center;padding:28px 16px}.authGate.hidden{display:none}.authCard{width:min(460px,100%);border:1px solid var(--line);background:linear-gradient(180deg,#ffffff07,transparent 32%),#10131af2;border-radius:24px;padding:24px;box-shadow:0 28px 80px #0008}.authBrand{display:flex;align-items:center;gap:12px;margin-bottom:20px}.authCard h2{font-size:30px;margin:4px 0 6px}.authLead{color:var(--muted);font-size:13px;line-height:1.55}.authTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#ffffff05;border:1px solid var(--line);padding:5px;border-radius:13px;margin:20px 0 15px}.authTab{border:0;background:transparent;color:var(--muted);border-radius:9px;padding:10px;font-weight:900;cursor:pointer}.authTab.active{background:var(--accent);color:#081008}.authForm{display:grid;gap:12px}.authForm.authHidden{display:none}.authField label{display:block;margin-bottom:6px}.authInput{width:100%;background:#0d1118;border:1px solid var(--line);border-radius:11px;padding:12px 13px;outline:none;font-size:16px}.authInput:focus{border-color:#96ff6a88;box-shadow:0 0 0 3px #96ff6a12}.authBtn{min-height:44px;border:1px solid var(--accent);background:var(--accent);color:#081008;border-radius:11px;font-weight:900;cursor:pointer}.authBtn:disabled{opacity:.55;cursor:not-allowed}.authLink{border:0;background:transparent;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.authMessage{display:none;border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:12px;font-size:12px;line-height:1.45}.authMessage.show{display:block}.authMessage.error{color:#ffaaaa;border-color:#ff7a7a40;background:#ff7a7a0d}.authMessage.good{color:#a9f5c2;border-color:#77e7a040;background:#77e7a00d}.authNote{font-size:11px;color:var(--muted);line-height:1.5}.topTools{display:flex;gap:10px;align-items:stretch}.accountBox{border:1px solid var(--line);background:#0d1016d9;border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px}.accountMeta{min-width:130px}.accountMeta strong{display:block;font-size:12px}.accountMeta span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.logoutBtn{border:1px solid var(--line);background:#ffffff07;border-radius:10px;padding:8px 10px;font-size:11px;font-weight:900;cursor:pointer}
-@media(max-width:980px){.hero,.grid{grid-template-columns:1fr}.prayer{grid-template-columns:1fr auto}.prayer .statuses{grid-column:1/-1}.trackers{grid-template-columns:1fr}.habitList{grid-template-columns:1fr}.breakdown{grid-template-columns:1fr}}@media(max-width:650px){.topTools{flex-direction:column}.accountBox{justify-content:space-between}.app{width:min(100% - 18px,1400px);padding-top:12px}.top{align-items:stretch;flex-direction:column}.clock{min-width:0}.summary{grid-template-columns:1fr 1fr}.head{flex-direction:column}.prayer{grid-template-columns:1fr auto}.statuses{grid-template-columns:1fr 1fr}.toggles{gap:4px}.toggle{font-size:10px}.card{padding:12px;min-height:76px}.formRow{grid-template-columns:1fr}.formActions{width:100%}.formActions .btn{flex:1}.habitItem .statuses{grid-template-columns:1fr}.rangeForm{grid-template-columns:1fr}.rangeHero{grid-template-columns:1fr}.analyticsToggleRow{align-items:flex-start;flex-direction:column}}
+:root{
+  color-scheme:dark;
+  --bg:#07090d;--panel:#0e1218;--panel2:#121720;--line:#252c36;--line2:#313a46;
+  --text:#f4f7fb;--muted:#8f9aaa;--accent:#98ff6f;--good:#72e39b;--warn:#f1c75c;--bad:#ff7777;
+  --r:22px;--shadow:0 24px 70px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:radial-gradient(circle at 16% 0,rgba(152,255,111,.05),transparent 28%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit;color:inherit}
+button{touch-action:manipulation}
+.hidden{display:none!important}
+.appLocked{display:none!important}
+.shell{width:min(1500px,calc(100% - 28px));margin:auto;padding:14px 0 34px}
+.topbar{display:grid;grid-template-columns:minmax(300px,1.5fr) minmax(190px,.55fr) minmax(300px,1fr) 52px;gap:12px;align-items:stretch;margin-bottom:12px}
+.topCell{border:1px solid var(--line);background:rgba(14,18,24,.94);border-radius:18px;min-height:78px;display:flex;align-items:center}
+.brandBox{gap:13px;padding:12px 16px}
+.mark{width:48px;height:48px;border-radius:15px;background:var(--accent);color:#071007;display:grid;place-items:center;font-weight:1000;font-size:18px;flex:0 0 auto}
+.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:900;color:var(--muted)}
+.brandTitle{font-size:22px;font-weight:1000;letter-spacing:.08em;margin-top:2px}
+.brandSub{font-size:11px;color:var(--muted);letter-spacing:.13em;margin-top:2px}
+.timeBox{justify-content:center;text-align:center;flex-direction:column}
+.timeMain{font-size:30px;font-weight:1000;line-height:1;font-variant-numeric:tabular-nums}
+.timeSub{font-size:10px;color:var(--muted);margin-top:7px}
+.progressBox{padding:12px 15px;display:block}
+.progressTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.progressPct{font-size:26px;font-weight:1000}
+.progressLabel{font-size:10px;color:var(--muted);line-height:1.25;text-transform:uppercase;letter-spacing:.11em}
+.progressTrack{height:7px;background:#1a2029;border-radius:999px;overflow:hidden;margin-top:10px}
+.progressFill{height:100%;background:var(--accent);width:0;transition:width .25s ease}
+.menuWrap{position:relative}
+.menuBtn{width:52px;height:100%;min-height:78px;border:1px solid var(--line);background:var(--panel);border-radius:18px;cursor:pointer;font-size:29px;line-height:1}
+.menu{position:absolute;right:0;top:86px;width:285px;border:1px solid var(--line2);background:#0c1016;border-radius:16px;padding:10px;z-index:40;box-shadow:0 22px 60px #0009}
+.menuSection{padding:8px}
+.menuTitle{font-size:11px;font-weight:900;color:var(--muted);margin-bottom:7px}
+.menuUser{font-weight:900;font-size:14px}
+.menuMuted{font-size:11px;color:var(--muted);margin-top:3px}
+.menu select{width:100%;margin-top:7px;background:#141a23;border:1px solid var(--line);border-radius:10px;padding:10px}
+.menuAction{width:100%;border:1px solid var(--line);background:#141a23;border-radius:10px;padding:10px;text-align:left;font-weight:800;cursor:pointer;margin-top:6px}
+.menuAction.danger{color:#ff9a9a}
+.layout{display:grid;grid-template-columns:250px minmax(420px,1.3fr) minmax(290px,.72fr);gap:12px;align-items:start}
+.panel{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 34%),var(--panel);border-radius:var(--r);box-shadow:var(--shadow)}
+.panelHead{height:46px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);font-size:13px;font-weight:1000;letter-spacing:.2em;text-transform:uppercase}
+.calendarPanel{overflow:hidden}
+.calTop{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 12px 5px}
+.calTitle{font-size:15px;font-weight:1000}
+.miniControls{display:flex;gap:5px}
+.iconBtn,.smallBtn{border:1px solid var(--line);background:#151a22;border-radius:9px;cursor:pointer;font-weight:900}
+.iconBtn{width:31px;height:31px}
+.smallBtn{padding:7px 9px;font-size:10px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);padding:7px 10px 3px}
+.week div{text-align:center;font-size:9px;color:var(--muted);font-weight:900}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:5px 10px 12px}
+.day{position:relative;min-height:38px;border:1px solid transparent;background:#12171f;border-radius:9px;cursor:pointer;font-size:11px;font-weight:900}
+.day.out{opacity:.3}
+.day.today{border-color:#98ff6f66}
+.day.sel{background:#1c2a1d;border-color:#98ff6f99}
+.dayDot{width:5px;height:5px;border-radius:50%;position:absolute;bottom:5px;left:50%;transform:translateX(-50%);background:var(--warn)}
+.dayDot.ok{background:var(--good)}
+.quickActions{display:grid;gap:8px;margin-top:12px}
+.quickBtn{min-height:50px;border:1px solid var(--line);background:var(--panel);border-radius:14px;cursor:pointer;font-weight:1000;font-size:12px;padding:10px 12px;text-align:center}
+.quickBtn:hover,.menuAction:hover,.habitRow:hover,.dietRow:hover{border-color:#44505e}
+.scrollPanel{overflow:hidden}
+.scrollBody{height:490px;overflow-y:auto;padding:10px;scrollbar-width:thin;scrollbar-color:#48515d #11161d}
+.scrollBody::-webkit-scrollbar{width:8px}
+.scrollBody::-webkit-scrollbar-track{background:#11161d}
+.scrollBody::-webkit-scrollbar-thumb{background:#48515d;border-radius:20px}
+.habitRow,.dietRow{width:100%;display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);background:#11161d;border-radius:14px;padding:10px 11px;margin-bottom:8px;cursor:pointer;text-align:left}
+.rowNum{width:31px;height:31px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;font-size:12px;font-weight:1000}
+.rowName{font-size:16px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowMeta{font-size:10px;color:var(--muted);margin-top:3px}
+.rowState{font-size:10px;font-weight:900;padding:6px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.stateDone{color:#07120b;background:var(--good);border-color:var(--good)}
+.stateLate{color:#191303;background:var(--warn);border-color:var(--warn)}
+.stateMissed{color:#190606;background:var(--bad);border-color:var(--bad)}
+.stateUnset{color:var(--muted);background:#161c25}
+.stateOff{color:#bbb;background:#222731}
+.emptyState{height:100%;min-height:250px;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:12px;padding:22px}
+.modalBack{position:fixed;inset:0;background:rgba(2,4,7,.76);display:grid;place-items:center;padding:18px;z-index:100}
+.modal{width:min(700px,100%);max-height:90vh;overflow-y:auto;border:1px solid var(--line2);background:#0c1016;border-radius:22px;box-shadow:0 30px 90px #000c}
+.modalHead{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.modalTitle{font-size:20px;font-weight:1000}
+.closeBtn{width:38px;height:38px;border:1px solid var(--line);background:#151b24;border-radius:10px;cursor:pointer;font-size:20px}
+.modalBody{padding:16px 18px}
+.modalSection{border:1px solid var(--line);background:#11161d;border-radius:14px;padding:13px;margin-bottom:10px}
+.sectionTitle{font-size:11px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
+.statusGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.statusBtn{min-height:42px;border:1px solid var(--line);background:#151b24;border-radius:10px;cursor:pointer;font-size:11px;font-weight:900;padding:7px}
+.statusBtn.active.done{background:var(--good);color:#07120b;border-color:var(--good)}
+.statusBtn.active.late{background:var(--warn);color:#191303;border-color:var(--warn)}
+.statusBtn.active.missed{background:var(--bad);color:#180505;border-color:var(--bad)}
+.statusBtn.active.unset{background:#39414d;color:#fff}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.dayToggle{min-height:38px;border:1px solid var(--line);background:#151b24;color:var(--muted);border-radius:10px;cursor:pointer;font-size:10px;font-weight:1000}
+.dayToggle.on{background:var(--accent);color:#071007;border-color:var(--accent)}
+.switchRow{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.switch{position:relative;width:48px;height:28px;border:0;background:#39414d;border-radius:999px;cursor:pointer;padding:0}
+.switch:after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;left:3px;top:3px;background:#fff;transition:.2s}
+.switch.on{background:var(--accent)}
+.switch.on:after{left:23px;background:#071007}
+.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field label{display:block;font-size:10px;color:var(--muted);font-weight:900;margin-bottom:6px}
+.input,.select{width:100%;background:#151b24;border:1px solid var(--line);border-radius:10px;padding:11px 12px;outline:none}
+.input:focus,.select:focus{border-color:#98ff6f88;box-shadow:0 0 0 3px rgba(152,255,111,.07)}
+.modalActions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:1px solid var(--line);background:#151b24;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:900;font-size:11px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#071007}
+.btn.danger{color:#ff9999}
+.prayerList{display:grid;gap:8px}
+.prayerRow{border:1px solid var(--line);background:#11161d;border-radius:14px;padding:11px}
+.prayerTop{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}
+.prayerName{font-weight:1000}
+.prayerTime{font-size:18px;font-weight:1000;font-variant-numeric:tabular-nums}
+.prayerRow .statusGrid{grid-template-columns:repeat(4,1fr)}
+.sourceLine{font-size:10px;color:var(--muted);margin-bottom:10px}
+.scheduleList{display:grid;gap:10px}
+.scheduleItem{border:1px solid var(--line);border-radius:13px;padding:12px;background:#11161d}
+.scheduleName{font-weight:1000;margin-bottom:9px}
+.statsResult{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.statCard{border:1px solid var(--line);border-radius:13px;background:#11161d;padding:12px}
+.statCard strong{display:block;font-size:22px}
+.statCard small{color:var(--muted)}
+.authGate{min-height:100vh;display:grid;place-items:center;padding:28px 16px}
+.authGate.hidden{display:none}
+.authCard{width:min(460px,100%);border:1px solid var(--line);background:#0e1218;border-radius:24px;padding:24px;box-shadow:0 28px 80px #0008}
+.authBrand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.authCard h2{font-size:30px;margin:4px 0 6px}
+.authLead{color:var(--muted);font-size:13px;line-height:1.55}
+.authTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#ffffff05;border:1px solid var(--line);padding:5px;border-radius:13px;margin:20px 0 15px}
+.authTab{border:0;background:transparent;color:var(--muted);border-radius:9px;padding:10px;font-weight:900;cursor:pointer}
+.authTab.active{background:var(--accent);color:#081008}
+.authForm{display:grid;gap:12px}
+.authForm.authHidden{display:none}
+.authField label{display:block;margin-bottom:6px}
+.authInput{width:100%;background:#0d1118;border:1px solid var(--line);border-radius:11px;padding:12px 13px;outline:none;font-size:16px}
+.authInput:focus{border-color:#96ff6a88;box-shadow:0 0 0 3px #96ff6a12}
+.authBtn{min-height:44px;border:1px solid var(--accent);background:var(--accent);color:#081008;border-radius:11px;font-weight:900;cursor:pointer}
+.authBtn:disabled{opacity:.55;cursor:not-allowed}
+.authLink{border:0;background:transparent;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.authMessage{display:none;border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:12px;font-size:12px;line-height:1.45}
+.authMessage.show{display:block}
+.authMessage.error{color:#ffaaaa;border-color:#ff7a7a40;background:#ff7a7a0d}
+.authMessage.good{color:#a9f5c2;border-color:#77e7a040;background:#77e7a00d}
+.authNote{font-size:11px;color:var(--muted);line-height:1.5}
+@media(max-width:1050px){
+  .topbar{grid-template-columns:1fr 180px 250px 52px}
+  .layout{grid-template-columns:230px 1fr}.dietPanel{grid-column:1/-1}.dietPanel .scrollBody{height:280px}
+}
+@media(max-width:760px){
+  .shell{width:min(100% - 16px,1500px);padding-top:8px}
+  .topbar{grid-template-columns:1fr 52px}.brandBox{grid-column:1/-1}.timeBox,.progressBox{min-height:72px}.menuWrap{grid-column:2;grid-row:2}.progressBox{grid-column:1}.timeBox{display:none}
+  .layout{grid-template-columns:1fr}.calendarCol,.habitsPanel,.dietPanel{grid-column:1}.scrollBody{height:390px}.dietPanel .scrollBody{height:330px}
+  .statusGrid,.prayerRow .statusGrid{grid-template-columns:1fr 1fr}.days{grid-template-columns:repeat(4,1fr)}.formGrid,.statsResult{grid-template-columns:1fr}
+  .menu{width:min(285px,calc(100vw - 26px))}
+}
 </style>
 </head>
 <body>
 <div id="authGate" class="authGate">
   <section class="authCard">
     <div class="authBrand"><div class="mark">LI</div><div><div class="eyebrow">Personal discipline system</div><h2>LOCK IN</h2></div></div>
-    <div class="authLead">O‘z akkauntingizga kiring. Odatlar, namoz belgilari va natijalaringiz faqat sizga tegishli bo‘ladi va qurilmalar orasida sinxronlanadi.</div>
-    <div id="authTabs" class="authTabs">
-      <button id="loginTab" class="authTab active" type="button">Kirish</button>
-      <button id="registerTab" class="authTab" type="button">Ro‘yxatdan o‘tish</button>
-    </div>
+    <div class="authLead">O‘z akkauntingizga kiring. Barcha odatlar, namoz belgilari va diet ma’lumotlari faqat sizga tegishli bo‘ladi.</div>
+    <div id="authTabs" class="authTabs"><button id="loginTab" class="authTab active" type="button">Kirish</button><button id="registerTab" class="authTab" type="button">Ro‘yxatdan o‘tish</button></div>
     <div id="authMessage" class="authMessage"></div>
     <form id="loginForm" class="authForm">
-      <div class="authField"><label class="eyebrow" for="loginEmail">Email</label><input id="loginEmail" class="authInput" type="email" autocomplete="email" required placeholder="email@example.com"></div>
-      <div class="authField"><label class="eyebrow" for="loginPassword">Parol</label><input id="loginPassword" class="authInput" type="password" autocomplete="current-password" required minlength="8" placeholder="Kamida 8 ta belgi"></div>
+      <div class="authField"><label class="eyebrow" for="loginEmail">Email</label><input id="loginEmail" class="authInput" type="email" autocomplete="email" required></div>
+      <div class="authField"><label class="eyebrow" for="loginPassword">Parol</label><input id="loginPassword" class="authInput" type="password" autocomplete="current-password" required minlength="8"></div>
       <button id="loginBtn" class="authBtn" type="submit">Kirish</button>
       <button id="forgotBtn" class="authLink" type="button">Parolni unutdingizmi?</button>
     </form>
     <form id="registerForm" class="authForm authHidden">
-      <div class="authField"><label class="eyebrow" for="registerUsername">Username</label><input id="registerUsername" class="authInput" type="text" autocomplete="username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9._-]+" placeholder="masalan: sardorbek"></div>
-      <div class="authField"><label class="eyebrow" for="registerEmail">Email</label><input id="registerEmail" class="authInput" type="email" autocomplete="email" required placeholder="email@example.com"></div>
-      <div class="authField"><label class="eyebrow" for="registerPassword">Parol</label><input id="registerPassword" class="authInput" type="password" autocomplete="new-password" required minlength="8" placeholder="Kamida 8 ta belgi"></div>
-      <div class="authField"><label class="eyebrow" for="registerPassword2">Parolni takrorlang</label><input id="registerPassword2" class="authInput" type="password" autocomplete="new-password" required minlength="8"></div>
+      <div class="authField"><label class="eyebrow" for="registerUsername">Username</label><input id="registerUsername" class="authInput" type="text" required minlength="3" maxlength="30" pattern="[A-Za-z0-9._-]+"></div>
+      <div class="authField"><label class="eyebrow" for="registerEmail">Email</label><input id="registerEmail" class="authInput" type="email" required></div>
+      <div class="authField"><label class="eyebrow" for="registerPassword">Parol</label><input id="registerPassword" class="authInput" type="password" required minlength="8"></div>
+      <div class="authField"><label class="eyebrow" for="registerPassword2">Parolni takrorlang</label><input id="registerPassword2" class="authInput" type="password" required minlength="8"></div>
       <button id="registerBtn" class="authBtn" type="submit">Akkaunt yaratish</button>
-      <div class="authNote">Email tasdiqlash yoqilgan bo‘lsa, Supabase sizga tasdiqlash xatini yuboradi.</div>
+      <div class="authNote">Email tasdiqlash yoqilgan bo‘lsa, emailingizga tasdiqlash havolasi keladi.</div>
     </form>
     <form id="resetForm" class="authForm authHidden">
-      <div class="authField"><label class="eyebrow" for="resetPassword">Yangi parol</label><input id="resetPassword" class="authInput" type="password" autocomplete="new-password" required minlength="8"></div>
-      <div class="authField"><label class="eyebrow" for="resetPassword2">Yangi parolni takrorlang</label><input id="resetPassword2" class="authInput" type="password" autocomplete="new-password" required minlength="8"></div>
+      <div class="authField"><label class="eyebrow" for="resetPassword">Yangi parol</label><input id="resetPassword" class="authInput" type="password" required minlength="8"></div>
+      <div class="authField"><label class="eyebrow" for="resetPassword2">Yangi parolni takrorlang</label><input id="resetPassword2" class="authInput" type="password" required minlength="8"></div>
       <button id="resetBtn" class="authBtn" type="submit">Parolni yangilash</button>
     </form>
   </section>
 </div>
-<main id="appShell" class="app appLocked">
-<header class="top">
-  <div class="brand"><div class="mark">LI</div><div><div class="eyebrow">Personal discipline system</div><h1>LOCK IN</h1></div></div>
-  <div class="topTools"><div class="accountBox"><div class="accountMeta"><strong id="userNameLabel">@foydalanuvchi</strong><span id="syncStatus">Bulut bilan sinxronlanmoqda…</span></div><button id="logoutBtn" class="logoutBtn" type="button">Chiqish</button></div><div class="clock"><div class="row"><span class="dot"></span><span id="locationLabel">Namangan</span><span>UTC+5</span></div><div id="liveClock" class="time">00:00:00</div><div id="liveDate" class="date">—</div></div></div>
-</header>
-<section class="hero">
-  <div class="panel heroCopy"><div class="eyebrow">Bugungi fokus</div><h2 id="heroTitle">Bugunni boshqar. Keyin natija keladi.</h2><div id="selectedDate" class="muted">—</div><div class="progressMeta"><span>Kunlik bajarilish</span><strong id="overallPct">0%</strong></div><div class="track"><div id="overallBar" class="bar"></div></div></div>
-  <div class="summary">
-    <div class="card"><div class="ico">☾</div><div><small>Namoz</small><strong id="sumPrayer">0/5</strong></div></div>
-    <div class="card"><div class="ico">▰</div><div><small>Zal</small><strong id="sumGym">Rejasiz</strong></div></div>
-    <div class="card"><div class="ico">↗</div><div><small>Ertalab</small><strong id="sumMorning">Rejasiz</strong></div></div>
-    <div class="card"><div class="ico">✓</div><div><small>Odatlar</small><strong id="sumHabits">0/0</strong></div></div>
-    <div class="card"><div class="ico">%</div><div><small>Umumiy</small><strong id="sumOverall">0%</strong></div></div>
-  </div>
-</section>
-<section class="grid">
-  <div class="stack">
-    <section class="panel pad">
-      <div class="head"><div><div class="eyebrow">Kalendar</div><h3 id="calTitle">—</h3></div><div class="btns"><button id="prev" class="icon">←</button><button id="today" class="btn">Bugun</button><button id="next" class="icon">→</button></div></div>
-      <div id="week" class="week"></div><div id="cal" class="cal"></div>
-    </section>
-    <section class="panel pad">
-      <div class="eyebrow">Haftalik sozlamalar</div>
-      <div style="margin-top:12px"><div class="scheduleTitle"><strong>Zal kunlari</strong><span id="gymCount" class="muted"></span></div><div id="gymSchedule" class="toggles"></div></div>
-      <div class="divider"></div>
-      <div><div class="scheduleTitle"><strong>Ertalabgi mashg‘ulot</strong><span id="morningCount" class="muted"></span></div><div id="morningSchedule" class="toggles"></div></div>
-    </section>
-  </div>
-  <div class="stack">
-    <section class="panel pad">
-      <div class="head"><div><div class="eyebrow">Namozlar</div><h3>Kunlik 5 mahal</h3></div><div style="min-width:240px"><label class="eyebrow" for="region">Hudud</label><select id="region" class="select"></select></div></div>
-      <div class="source"><span id="source" class="badge">Vaqtlar yuklanmoqda…</span><button id="retry" class="btn">Yangilash</button></div>
-      <div id="prayers" class="prayers"></div>
-    </section>
-    <section class="trackers">
-      <div id="gymTracker" class="panel tracker"><div class="trackerTop"><div><div class="eyebrow">Zal</div><h3>Davomat</h3><span id="gymActivityState" class="trackerState active">Faol</span></div><div class="trackerRight"><strong id="gymWeek">0/0 hafta</strong><button id="gymToggle" class="miniBtn pause">To‘xtatish</button></div></div><div id="gymPlan" class="plan"></div><div id="gymStatus" class="statuses"></div></div>
-      <div id="morningTracker" class="panel tracker"><div class="trackerTop"><div><div class="eyebrow">Ertalabgi qo‘shimcha mashg‘ulot</div><h3>Intizom</h3><span id="morningActivityState" class="trackerState active">Faol</span></div><div class="trackerRight"><strong id="morningWeek">0/0 hafta</strong><button id="morningToggle" class="miniBtn pause">To‘xtatish</button></div></div><div id="morningPlan" class="plan"></div><div id="morningStatus" class="statuses"></div></div>
-    </section>
-  </div>
-</section>
-<section class="panel analyticsPanel compact">
-  <div class="analyticsToggleRow">
-    <div><div class="eyebrow">Statistika</div><h3>Odatlar bajarilish foizi</h3><div class="muted" style="margin-top:4px;font-size:12px">Istagan sana oralig‘ini tanlab natijani hisoblang.</div></div>
-    <button id="toggleAnalytics" class="btn">Statistikani ko‘rish</button>
-  </div>
-  <div id="analyticsBody" class="analyticsBody hidden">
-    <div class="rangeForm">
-      <div class="dateField"><label class="eyebrow" for="rangeFrom">Boshlanish sana</label><input id="rangeFrom" class="dateInput" type="date"></div>
-      <div class="dateField"><label class="eyebrow" for="rangeTo">Tugash sana</label><input id="rangeTo" class="dateInput" type="date"></div>
-      <button id="calculateRange" class="btn primary">Hisoblash</button>
-    </div>
-    <div id="rangeError" class="rangeError"></div>
-    <div id="rangeResult" class="rangeResult">
-      <div class="rangeHero">
-        <div><div id="rangePct" class="rangePct">0%</div><div id="rangePeriod" class="rangePeriod">—</div></div>
-        <div><div class="progressMeta" style="margin-top:0"><span>Umumiy bajarilish</span><strong id="rangeCount">0/0</strong></div><div class="track"><div id="rangeBar" class="bar"></div></div></div>
-      </div>
-      <div class="breakdown">
-        <div class="breakCard"><small>Zal</small><strong id="rangeGym">0/0 · 0%</strong></div>
-        <div class="breakCard"><small>Ertalabgi mashg‘ulot</small><strong id="rangeMorning">0/0 · 0%</strong></div>
-        <div class="breakCard"><small>Shaxsiy odatlar</small><strong id="rangeHabits">0/0 · 0%</strong></div>
+
+<main id="appShell" class="shell appLocked">
+  <header class="topbar">
+    <div class="topCell brandBox"><div class="mark">LI</div><div><div class="brandTitle">LOCK-IN</div><div class="brandSub">PERSONAL DISCIPLINE SYSTEM</div></div></div>
+    <div class="topCell timeBox"><div id="liveClock" class="timeMain">00:00</div><div id="liveDate" class="timeSub">—</div></div>
+    <div class="topCell progressBox"><div class="progressTop"><div class="progressLabel">Kunlik odatlar<br>bajarilish foizi</div><div id="dailyPct" class="progressPct">0%</div></div><div class="progressTrack"><div id="dailyBar" class="progressFill"></div></div></div>
+    <div class="menuWrap"><button id="menuBtn" class="menuBtn" type="button" aria-label="Sozlamalar">⋮</button><div id="menu" class="menu hidden">
+      <div class="menuSection"><div class="menuTitle">AKKAUNT</div><div id="menuUsername" class="menuUser">@user</div><div id="syncStatus" class="menuMuted">Cloud bilan sinxron</div></div>
+      <div class="menuSection"><div class="menuTitle">NAMOZ HUDUDI</div><select id="regionSelect"></select></div>
+      <div class="menuSection"><button id="statsBtn" class="menuAction" type="button">Statistikani ko‘rish</button><button id="logoutBtn" class="menuAction danger" type="button">Chiqish</button></div>
+    </div></div>
+  </header>
+
+  <section class="layout">
+    <div class="calendarCol">
+      <section class="panel calendarPanel">
+        <div class="panelHead">DATE</div>
+        <div class="calTop"><div id="calTitle" class="calTitle">—</div><div class="miniControls"><button id="prevMonth" class="iconBtn" type="button">←</button><button id="todayBtn" class="smallBtn" type="button">Bugun</button><button id="nextMonth" class="iconBtn" type="button">→</button></div></div>
+        <div id="week" class="week"></div><div id="cal" class="cal"></div>
+      </section>
+      <div class="quickActions">
+        <button id="scheduleBtn" class="quickBtn" type="button">Odatlar kunlarini sozlash</button>
+        <button id="addHabitBtn" class="quickBtn" type="button">Odat qo‘shish</button>
+        <button id="addDietBtn" class="quickBtn" type="button">Diet qo‘shish</button>
       </div>
     </div>
-  </div>
-</section>
-<section class="panel pad habitsPanel">
-  <div class="head">
-    <div><div class="eyebrow">Shaxsiy odatlar</div><h3>O‘zingiz yangi odat qo‘shing</h3><div class="muted" style="margin-top:4px;font-size:12px">Masalan: kitob o‘qish, 10 000 qadam, koreys tili, suv ichish va hokazo.</div></div>
-    <button id="addHabitBtn" class="btn primary">+ Odat qo‘shish</button>
-  </div>
-  <div id="habitForm" class="habitForm hidden">
-    <div class="formRow">
-      <div class="field"><label class="eyebrow" for="habitName">Odat nomi</label><input id="habitName" class="input" maxlength="60" placeholder="Masalan: 30 daqiqa kitob o‘qish"></div>
-      <div class="formActions"><button id="cancelHabit" class="btn">Bekor qilish</button><button id="saveHabit" class="btn primary">Saqlash</button></div>
-    </div>
-    <div style="margin-top:13px"><div class="scheduleTitle"><strong>Qaysi kunlari?</strong><span id="habitDaysCount" class="muted"></span></div><div id="habitDays" class="toggles"></div></div>
-  </div>
-  <div id="habitList" class="habitList"></div>
-</section>
+
+    <section class="panel scrollPanel habitsPanel">
+      <div class="panelHead">HABITS</div>
+      <div id="habitList" class="scrollBody"></div>
+    </section>
+
+    <section class="panel scrollPanel dietPanel">
+      <div class="panelHead">DIET</div>
+      <div id="dietList" class="scrollBody"></div>
+    </section>
+  </section>
 </main>
+
+<div id="modalBack" class="modalBack hidden" role="dialog" aria-modal="true">
+  <div class="modal"><div class="modalHead"><div id="modalTitle" class="modalTitle">—</div><button id="modalClose" class="closeBtn" type="button">×</button></div><div id="modalBody" class="modalBody"></div></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
 "use strict";
-var BASE_KEY="lock-in:v1",KEY=BASE_KEY;
+var BASE_KEY="lock-in:v2",KEY=BASE_KEY;
 var SUPABASE_URL="https://jiexjilxxlsseuarrrnm.supabase.co";
 var SUPABASE_KEY="sb_publishable_AoI_uspTqNVEopYidnB3Sw_sLy27Ijd";
 var SITE_URL=window.location.origin+window.location.pathname;
 var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-var currentUser=null,currentUsername="",activeUserId=null,cloudSaveTimer=null,cloudLoading=false;
-var DEFAULT={version:1,region:"Namangan",gymSchedule:[1,3,5],morningSchedule:[2,4,6],gymActivePeriods:[],morningActivePeriods:[],habits:[],dayData:{}};
 var MONTHS=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
 var WD=["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"];
 var WDS=["Dush","Sesh","Chor","Pay","Jum","Shan","Yak"];
 var REGIONS={"Toshkent shahri":[41.2995,69.2401],"Toshkent viloyati":[41.0167,69.35],"Andijon":[40.7821,72.3442],"Buxoro":[39.7681,64.4556],"Farg‘ona":[40.3894,71.787],"Jizzax":[40.125,67.8808],"Namangan":[40.9983,71.6726],"Navoiy":[40.1039,65.3688],"Qashqadaryo":[38.8606,65.7891],"Qoraqalpog‘iston":[42.46,59.615],"Samarqand":[39.6542,66.9597],"Sirdaryo":[40.8436,68.6617],"Surxondaryo":[37.2242,67.2783],"Xorazm":[41.55,60.6333]};
 var PR=[["fajr","Bomdod","Fajr"],["dhuhr","Peshin","Dhuhr"],["asr","Asr","Asr"],["maghrib","Shom","Maghrib"],["isha","Xufton","Isha"]];
-var PSTATUS=[["unset","Belgilanmagan","neutral"],["done","O‘qildi","good"],["late","Kechiktirib o‘qildi","warn"],["missed","O‘qilmadi","bad"]];
-var GSTATUS=[["unset","Belgilanmagan","neutral"],["done","Chiqildi","good"],["missed","Chiqilmadi","bad"]];
-var MSTATUS=[["unset","Belgilanmagan","neutral"],["done","Qildim","good"],["missed","Qilolmadim","bad"]];
-var HSTATUS=[["unset","Belgilanmagan","neutral"],["done","Bajardim","good"],["missed","Bajarmadim","bad"]];
-var state=load(),selected=start(new Date()),cursor=new Date(selected.getFullYear(),selected.getMonth(),1),times=null,token=0,habitDraftDays=[1,2,3,4,5,6,7],editingHabitId=null;
+var STATUS=[["unset","Belgilanmagan","unset"],["done","Bajarildi","done"],["late","Kechiktirib bajarildi","late"],["missed","Bajarilmadi","missed"]];
+var PSTATUS=[["unset","Belgilanmagan","unset"],["done","O‘qildi","done"],["late","Kechiktirib o‘qildi","late"],["missed","O‘qilmadi","missed"]];
+var DEFAULT={version:2,region:"Namangan",gymSchedule:[1,3,5],morningSchedule:[2,4,6],gymActivePeriods:[],morningActivePeriods:[],habits:[],diets:[],dayData:{}};
+var state=clone(DEFAULT),selected=start(new Date()),cursor=new Date(selected.getFullYear(),selected.getMonth(),1),prayerTimes=null,prayerToken=0;
+var currentUser=null,currentUsername="",cloudSaveTimer=null,cloudLoading=false,activeUserId=null;
+
 function q(id){return document.getElementById(id)}
 function clone(x){return JSON.parse(JSON.stringify(x))}
-function normalizeState(x){if(!x||x.version!==1){var fresh=clone(DEFAULT),td=key(start(new Date()));fresh.gymActivePeriods=[{start:td,end:null}];fresh.morningActivePeriods=[{start:td,end:null}];return fresh}var s=Object.assign(clone(DEFAULT),x,{habits:Array.isArray(x.habits)?x.habits:[],dayData:x.dayData||{}});var today=key(start(new Date()));if(!Array.isArray(s.gymActivePeriods)||!s.gymActivePeriods.length)s.gymActivePeriods=[{start:earliestCoreDate("gym",s.dayData)||today,end:null}];if(!Array.isArray(s.morningActivePeriods)||!s.morningActivePeriods.length)s.morningActivePeriods=[{start:earliestCoreDate("morning",s.dayData)||today,end:null}];s.habits=s.habits.map(function(h){var first=h.createdAt||earliestHabitDate(h.id,s.dayData)||today;var periods=Array.isArray(h.activePeriods)?h.activePeriods.filter(function(p){return p&&p.start}):[{start:first,end:null}];return Object.assign({},h,{createdAt:first,activePeriods:periods})});return s}
-function loadFromKey(k){try{return normalizeState(JSON.parse(localStorage.getItem(k)||"null"))}catch(e){return normalizeState(null)}}
-function load(){return loadFromKey(KEY)}
-function setSyncStatus(text){if(q("syncStatus"))q("syncStatus").textContent=text}
-function queueCloudSave(){if(!currentUser||cloudLoading)return;clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(saveCloudState,650)}
-async function saveCloudState(){if(!currentUser)return;setSyncStatus("Saqlanmoqda…");var res=await sb.from("lockin_state").upsert({user_id:currentUser.id,data:state,updated_at:new Date().toISOString()},{onConflict:"user_id"});setSyncStatus(res.error?"Cloud xatosi · local saqlandi":"Cloud bilan sinxron")}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));queueCloudSave()}
 function start(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
 function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function parseKey(s){var p=String(s).split("-");return new Date(Number(p[0]),Number(p[1])-1,Number(p[2]))}
 function addDays(d,n){var x=start(d);x.setDate(x.getDate()+n);return x}
-function earliestHabitDate(id,days){var ks=Object.keys(days||{}).filter(function(k){var h=days[k]&&days[k].habits;return h&&h[id]&&h[id]!=="unset"}).sort();return ks[0]||null}
-function earliestCoreDate(kind,days){var ks=Object.keys(days||{}).filter(function(k){return days[k]&&days[k][kind]&&days[k][kind]!=="unset"}).sort();return ks[0]||null}
-function corePeriods(kind){return kind==="gym"?state.gymActivePeriods:state.morningActivePeriods}
-function coreActiveOn(kind,d){var dk=key(d);return(corePeriods(kind)||[]).some(function(p){return dk>=p.start&&(!p.end||dk<=p.end)})}
-function coreIsActive(kind){return(corePeriods(kind)||[]).some(function(p){return !p.end})}
-function toggleCorePause(kind){var prop=kind==="gym"?"gymActivePeriods":"morningActivePeriods",periods=state[prop]||[],today=start(new Date()),td=key(today),open=periods.find(function(p){return !p.end});if(open){var end=key(addDays(today,-1));if(open.start===td)periods=periods.filter(function(p){return p!==open});else open.end=end}else periods.push({start:td,end:null});state[prop]=periods;save();renderAll(false)}
-function habitActiveOn(h,d){var dk=key(d),periods=h.activePeriods||[];return periods.some(function(p){return dk>=p.start&&(!p.end||dk<=p.end)})}
-function habitIsActive(h){return (h.activePeriods||[]).some(function(p){return !p.end})}
-function notFuture(d){return key(d)<=key(start(new Date()))}
 function iso(d){return d.getDay()===0?7:d.getDay()}
 function same(a,b){return key(a)===key(b)}
 function pretty(d){return d.getDate()+"-"+MONTHS[d.getMonth()]+", "+d.getFullYear()+" • "+WD[d.getDay()]}
 function monthTitle(d){var m=MONTHS[d.getMonth()];return m.charAt(0).toUpperCase()+m.slice(1)+" "+d.getFullYear()}
-function getDay(k){var d=state.dayData[k]||{prayers:{},gym:"unset",morning:"unset",habits:{}};if(!d.habits)d.habits={};return d}
-function ensure(k){if(!state.dayData[k])state.dayData[k]={prayers:{},gym:"unset",morning:"unset",habits:{}};if(!state.dayData[k].prayers)state.dayData[k].prayers={};if(!state.dayData[k].habits)state.dayData[k].habits={};return state.dayData[k]}
+function notFuture(d){return key(d)<=key(start(new Date()))}
+function earliestCoreDate(kind,days){var ks=Object.keys(days||{}).filter(function(k){return days[k]&&days[k][kind]&&days[k][kind]!=="unset"}).sort();return ks[0]||null}
+function earliestItemDate(id,field,days){var ks=Object.keys(days||{}).filter(function(k){var h=days[k]&&days[k][field];return h&&h[id]&&h[id]!=="unset"}).sort();return ks[0]||null}
+function normalizePeriods(periods,fallback){var p=Array.isArray(periods)?periods.filter(function(x){return x&&x.start}):[];return p.length?p:[{start:fallback,end:null}]}
+function normalizeState(x){
+  var today=key(start(new Date()));
+  if(!x||!(x.version===1||x.version===2)){
+    var fresh=clone(DEFAULT);fresh.gymActivePeriods=[{start:today,end:null}];fresh.morningActivePeriods=[{start:today,end:null}];return fresh
+  }
+  var s=Object.assign(clone(DEFAULT),x,{version:2,habits:Array.isArray(x.habits)?x.habits:[],diets:Array.isArray(x.diets)?x.diets:[],dayData:x.dayData||{}});
+  s.gymActivePeriods=normalizePeriods(s.gymActivePeriods,earliestCoreDate("gym",s.dayData)||today);
+  s.morningActivePeriods=normalizePeriods(s.morningActivePeriods,earliestCoreDate("morning",s.dayData)||today);
+  s.habits=s.habits.map(function(h){var created=h.createdAt||earliestItemDate(h.id,"habits",s.dayData)||today;return Object.assign({},h,{createdAt:created,schedule:Array.isArray(h.schedule)?h.schedule:[1,2,3,4,5,6,7],activePeriods:normalizePeriods(h.activePeriods,created)})});
+  s.diets=s.diets.map(function(h){var created=h.createdAt||earliestItemDate(h.id,"diets",s.dayData)||today;return Object.assign({},h,{createdAt:created,schedule:Array.isArray(h.schedule)?h.schedule:[1,2,3,4,5,6,7],activePeriods:normalizePeriods(h.activePeriods,created)})});
+  Object.keys(s.dayData).forEach(function(k){var d=s.dayData[k];if(!d.prayers)d.prayers={};if(!d.habits)d.habits={};if(!d.diets)d.diets={};if(!d.gym)d.gym="unset";if(!d.morning)d.morning="unset"});
+  return s
+}
+function loadFromKey(k){try{return normalizeState(JSON.parse(localStorage.getItem(k)||"null"))}catch(e){return normalizeState(null)}}
+function setSync(text){q("syncStatus").textContent=text}
+function queueCloud(){if(!currentUser||cloudLoading)return;clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(saveCloud,650)}
+async function saveCloud(){if(!currentUser)return;setSync("Saqlanmoqda…");var r=await sb.from("lockin_state").upsert({user_id:currentUser.id,data:state,updated_at:new Date().toISOString()},{onConflict:"user_id"});setSync(r.error?"Cloud xatosi · local saqlandi":"Cloud bilan sinxron")}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));queueCloud()}
+function getDay(k){var d=state.dayData[k]||{prayers:{},gym:"unset",morning:"unset",habits:{},diets:{}};if(!d.prayers)d.prayers={};if(!d.habits)d.habits={};if(!d.diets)d.diets={};return d}
+function ensure(k){if(!state.dayData[k])state.dayData[k]={prayers:{},gym:"unset",morning:"unset",habits:{},diets:{}};var d=state.dayData[k];if(!d.prayers)d.prayers={};if(!d.habits)d.habits={};if(!d.diets)d.diets={};return d}
+function periodsActiveOn(periods,d){var dk=key(d);return (periods||[]).some(function(p){return dk>=p.start&&(!p.end||dk<=p.end)})}
+function corePeriods(kind){return kind==="gym"?state.gymActivePeriods:state.morningActivePeriods}
+function coreActiveOn(kind,d){return periodsActiveOn(corePeriods(kind),d)}
+function coreIsActive(kind){return corePeriods(kind).some(function(p){return !p.end})}
+function itemActiveOn(item,d){return periodsActiveOn(item.activePeriods,d)}
+function itemIsActive(item){return (item.activePeriods||[]).some(function(p){return !p.end})}
+function togglePeriods(periods){var today=start(new Date()),td=key(today),open=periods.find(function(p){return !p.end});if(open){var end=key(addDays(today,-1));if(open.start===td)return periods.filter(function(p){return p!==open});open.end=end;return periods}else{periods.push({start:td,end:null});return periods}}
+function statusInfo(v,prayer){var arr=prayer?PSTATUS:STATUS;for(var i=0;i<arr.length;i++)if(arr[i][0]===v)return arr[i];return arr[0]}
+function statusBadge(v,prayer){var s=statusInfo(v,prayer);var cls=s[2]==="done"?"stateDone":s[2]==="late"?"stateLate":s[2]==="missed"?"stateMissed":"stateUnset";return '<span class="rowState '+cls+'">'+s[1]+'</span>'}
+function uuid(){return "i"+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+
+function renderWeek(){q("week").innerHTML=WDS.map(function(x){return "<div>"+x+"</div>"}).join("")}
+function dayProgress(d){
+  var data=getDay(key(d)),planned=5,done=0,marked=0;
+  PR.forEach(function(p){var s=data.prayers[p[0]]||"unset";if(s!=="unset")marked++;if(s==="done"||s==="late")done++});
+  if(coreActiveOn("gym",d)&&state.gymSchedule.indexOf(iso(d))>=0){planned++;if(data.gym!=="unset")marked++;if(data.gym==="done"||data.gym==="late")done++}
+  if(coreActiveOn("morning",d)&&state.morningSchedule.indexOf(iso(d))>=0){planned++;if(data.morning!=="unset")marked++;if(data.morning==="done"||data.morning==="late")done++}
+  state.habits.forEach(function(h){if(itemActiveOn(h,d)&&h.schedule.indexOf(iso(d))>=0){planned++;var s=(data.habits||{})[h.id]||"unset";if(s!=="unset")marked++;if(s==="done"||s==="late")done++}});
+  state.diets.forEach(function(h){if(itemActiveOn(h,d)&&h.schedule.indexOf(iso(d))>=0){planned++;var s=(data.diets||{})[h.id]||"unset";if(s!=="unset")marked++;if(s==="done"||s==="late")done++}});
+  return{planned:planned,done:done,marked:marked,pct:planned?Math.round(done/planned*100):0}
+}
+function renderCalendar(){
+  q("calTitle").textContent=monthTitle(cursor);var box=q("cal");box.innerHTML="";
+  var y=cursor.getFullYear(),m=cursor.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,gridStart=new Date(y,m,1-offset),today=start(new Date());
+  for(var i=0;i<42;i++){(function(d){var pr=dayProgress(d),b=document.createElement("button");b.type="button";b.className="day "+(d.getMonth()!==m?"out ":"")+(same(d,today)?"today ":"")+(same(d,selected)?"sel ":"");b.innerHTML="<span>"+d.getDate()+"</span>"+(pr.marked?'<span class="dayDot '+(pr.pct===100?"ok":"")+'"></span>':"");b.addEventListener("click",function(){selected=start(d);if(selected.getMonth()!==cursor.getMonth()||selected.getFullYear()!==cursor.getFullYear())cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)});box.appendChild(b)})(new Date(gridStart.getFullYear(),gridStart.getMonth(),gridStart.getDate()+i))}
+}
+function prayerSummary(){var d=getDay(key(selected)),done=0;PR.forEach(function(p){var s=d.prayers[p[0]]||"unset";if(s==="done"||s==="late")done++});return done+"/5"}
+function coreSummary(kind){var d=getDay(key(selected)),sch=kind==="gym"?state.gymSchedule:state.morningSchedule;if(!coreActiveOn(kind,selected))return"Faol emas";if(sch.indexOf(iso(selected))<0)return"Rejada emas";return statusInfo(d[kind]||"unset",false)[1]}
+function renderHabits(){
+  var box=q("habitList"),d=getDay(key(selected)),rows=[];
+  rows.push({type:"pray",name:"PRAY",meta:"5 mahal · "+prayerSummary(),status:""});
+  rows.push({type:"gym",name:"GYM",meta:coreSummary("gym"),status:d.gym||"unset",off:!coreIsActive("gym")});
+  rows.push({type:"morning",name:"MORNING WORKOUT",meta:coreSummary("morning"),status:d.morning||"unset",off:!coreIsActive("morning")});
+  state.habits.forEach(function(h){var planned=itemActiveOn(h,selected)&&h.schedule.indexOf(iso(selected))>=0;rows.push({type:"personal",item:h,name:h.name,meta:itemIsActive(h)?(planned?"Bugun rejalashtirilgan":"Bugun rejasiz"):"Faol emas",status:(d.habits||{})[h.id]||"unset",off:!itemIsActive(h)})});
+  box.innerHTML="";
+  rows.forEach(function(r,idx){var b=document.createElement("button");b.type="button";b.className="habitRow";var stateHtml=r.type==="pray"?'<span class="rowState stateUnset">'+prayerSummary()+'</span>':r.off?'<span class="rowState stateOff">Faol emas</span>':statusBadge(r.status,false);b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+stateHtml;b.querySelector(".rowName").textContent=r.name;b.querySelector(".rowMeta").textContent=r.meta;b.addEventListener("click",function(){if(r.type==="pray")openPrayerModal();else if(r.type==="gym"||r.type==="morning")openCoreModal(r.type);else openItemModal("habit",r.item)});box.appendChild(b)})
+}
+function renderDiets(){
+  var box=q("dietList"),d=getDay(key(selected));box.innerHTML="";
+  if(!state.diets.length){box.innerHTML='<div class="emptyState"><div>Hali diet odati qo‘shilmagan.<br><br><strong>“Diet qo‘shish”</strong> tugmasidan boshlang.</div></div>';return}
+  state.diets.forEach(function(h,idx){var planned=itemActiveOn(h,selected)&&h.schedule.indexOf(iso(selected))>=0,s=(d.diets||{})[h.id]||"unset",b=document.createElement("button");b.type="button";b.className="dietRow";var badge=itemIsActive(h)?statusBadge(s,false):'<span class="rowState stateOff">Faol emas</span>';b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+badge;b.querySelector(".rowName").textContent=h.name;b.querySelector(".rowMeta").textContent=itemIsActive(h)?(planned?"Bugun rejalashtirilgan":"Bugun rejasiz"):"Faol emas";b.addEventListener("click",function(){openItemModal("diet",h)});box.appendChild(b)})
+}
+function renderTop(){var p=dayProgress(selected);q("dailyPct").textContent=p.pct+"%";q("dailyBar").style.width=p.pct+"%"}
+function renderRegions(){q("regionSelect").innerHTML=Object.keys(REGIONS).map(function(x){return "<option>"+x+"</option>"}).join("");q("regionSelect").value=state.region}
+function renderAll(refetch){renderCalendar();renderHabits();renderDiets();renderTop();if(refetch)fetchPrayerTimes()}
+
+function openModal(title,html){q("modalTitle").textContent=title;q("modalBody").innerHTML=html;q("modalBack").classList.remove("hidden")}
+function closeModal(){q("modalBack").classList.add("hidden");q("modalBody").innerHTML=""}
+function statusButtons(current,prayer,onChange){
+  var arr=prayer?PSTATUS:STATUS,wrap=document.createElement("div");wrap.className="statusGrid";
+  arr.forEach(function(s){var b=document.createElement("button");b.type="button";b.className="statusBtn "+s[2]+(current===s[0]?" active":"");b.textContent=s[1];b.addEventListener("click",function(){onChange(s[0])});wrap.appendChild(b)});return wrap
+}
+function daysEditor(schedule,onChange){
+  var wrap=document.createElement("div");wrap.className="days";
+  for(var i=1;i<=7;i++){(function(day){var b=document.createElement("button");b.type="button";b.className="dayToggle "+(schedule.indexOf(day)>=0?"on":"");b.textContent=WDS[day-1];b.addEventListener("click",function(){var n=schedule.indexOf(day)>=0?schedule.filter(function(x){return x!==day}):schedule.concat([day]).sort();onChange(n);renderAll(false)});wrap.appendChild(b)})(i)}return wrap
+}
+async function fetchPrayerTimes(){
+  var my=++prayerToken,c=REGIONS[state.region]||REGIONS.Namangan,d=selected,dateKey=key(d),path=String(d.getDate()).padStart(2,"0")+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+d.getFullYear();prayerTimes=null;
+  try{var local=await fetch("./data/prayer-times.json?v="+Date.now(),{cache:"no-store"});if(local.ok){var cache=await local.json(),exact=cache&&cache.data&&cache.data[state.region]&&cache.data[state.region][dateKey];if(exact&&my===prayerToken){prayerTimes=exact;return}}}catch(e){}
+  try{var r=await fetch("https://api.aladhan.com/v1/timings/"+path+"?latitude="+c[0]+"&longitude="+c[1]+"&method=3&school=1");if(!r.ok)throw new Error();var json=await r.json();if(my===prayerToken)prayerTimes=json.data.timings}catch(e){}
+}
+async function openPrayerModal(){
+  if(!prayerTimes)await fetchPrayerTimes();
+  openModal("PRAY — "+pretty(selected),'<div class="sourceLine" id="prayerSource">Manba: namozvaqti.uz · '+state.region+'</div><div id="prayerList" class="prayerList"></div>');
+  var data=getDay(key(selected)),list=q("prayerList");
+  PR.forEach(function(p){var row=document.createElement("div");row.className="prayerRow";row.innerHTML='<div class="prayerTop"><div class="prayerName">'+p[1]+'</div><div class="prayerTime">'+(prayerTimes&&prayerTimes[p[2]]?prayerTimes[p[2]]:"—:—")+'</div></div>';var s=(data.prayers||{})[p[0]]||"unset";row.appendChild(statusButtons(s,true,function(v){ensure(key(selected)).prayers[p[0]]=v;save();openPrayerModal();renderAll(false)}));list.appendChild(row)})
+}
+function openCoreModal(kind){
+  var isGym=kind==="gym",title=isGym?"GYM":"MORNING WORKOUT",schedule=isGym?state.gymSchedule:state.morningSchedule,active=coreIsActive(kind),data=getDay(key(selected)),current=data[kind]||"unset",planned=coreActiveOn(kind,selected)&&schedule.indexOf(iso(selected))>=0;
+  openModal(title+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+title+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="activeSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Hafta kunlari</div><div id="coreDays"></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="coreStatus"></div></div>');
+  q("activeSwitch").addEventListener("click",function(){if(isGym)state.gymActivePeriods=togglePeriods(state.gymActivePeriods);else state.morningActivePeriods=togglePeriods(state.morningActivePeriods);save();openCoreModal(kind);renderAll(false)});
+  q("coreDays").appendChild(daysEditor(schedule,function(n){if(isGym)state.gymSchedule=n;else state.morningSchedule=n;save();openCoreModal(kind)}));
+  var st=statusButtons(current,false,function(v){ensure(key(selected))[kind]=v;save();openCoreModal(kind);renderAll(false)});if(!planned)Array.from(st.children).forEach(function(b){b.disabled=true});q("coreStatus").appendChild(st)
+}
+function openItemModal(type,item){
+  var field=type==="diet"?"diets":"habits",active=itemIsActive(item),planned=itemActiveOn(item,selected)&&item.schedule.indexOf(iso(selected))>=0,current=(getDay(key(selected))[field]||{})[item.id]||"unset";
+  openModal(item.name+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+item.name+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="itemSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Hafta kunlari</div><div id="itemDays"></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="itemStatus"></div></div><div class="modalActions"><button id="deleteItem" class="btn danger" type="button">O‘chirish</button></div>');
+  q("itemSwitch").addEventListener("click",function(){item.activePeriods=togglePeriods(item.activePeriods||[]);save();openItemModal(type,item);renderAll(false)});
+  q("itemDays").appendChild(daysEditor(item.schedule.slice(),function(n){item.schedule=n;save();openItemModal(type,item)}));
+  var st=statusButtons(current,false,function(v){ensure(key(selected))[field][item.id]=v;save();openItemModal(type,item);renderAll(false)});if(!planned)Array.from(st.children).forEach(function(b){b.disabled=true});q("itemStatus").appendChild(st);
+  q("deleteItem").addEventListener("click",function(){if(!confirm("“"+item.name+"” ni o‘chirasizmi?"))return;var arr=type==="diet"?state.diets:state.habits;if(type==="diet")state.diets=arr.filter(function(x){return x.id!==item.id});else state.habits=arr.filter(function(x){return x.id!==item.id});Object.keys(state.dayData).forEach(function(k){var dd=state.dayData[k]&&state.dayData[k][field];if(dd)delete dd[item.id]});save();closeModal();renderAll(false)})
+}
+function openAddModal(type){
+  var title=type==="diet"?"Diet qo‘shish":"Odat qo‘shish",draft=[1,2,3,4,5,6,7];
+  openModal(title,'<div class="modalSection"><div class="field"><label>Nomi</label><input id="newName" class="input" maxlength="60" placeholder="'+(type==="diet"?"Masalan: Shakar yo‘q":"Masalan: 30 daqiqa kitob")+'"></div></div><div class="modalSection"><div class="sectionTitle">Qaysi kunlari?</div><div id="newDays"></div></div><div class="modalActions"><button id="saveNew" class="btn primary" type="button">Saqlash</button></div>');
+  function draw(){var host=q("newDays");host.innerHTML="";host.appendChild(daysEditor(draft,function(n){draft=n;draw()}))}
+  draw();q("saveNew").addEventListener("click",function(){var name=q("newName").value.trim();if(!name)return q("newName").focus();if(!draft.length)return alert("Kamida bitta hafta kunini tanlang.");var td=key(start(new Date())),obj={id:uuid(),name:name,schedule:draft.slice(),createdAt:td,activePeriods:[{start:td,end:null}]};if(type==="diet")state.diets.push(obj);else state.habits.push(obj);save();closeModal();renderAll(false)})
+}
+function openScheduleModal(){
+  openModal("Odatlar kunlarini sozlash",'<div id="scheduleList" class="scheduleList"></div>');
+  var list=q("scheduleList");
+  function addRow(name,schedule,onChange){var row=document.createElement("div");row.className="scheduleItem";row.innerHTML='<div class="scheduleName"></div><div class="daysHost"></div>';row.querySelector(".scheduleName").textContent=name;row.querySelector(".daysHost").appendChild(daysEditor(schedule.slice(),function(n){onChange(n);save();openScheduleModal();renderAll(false)}));list.appendChild(row)}
+  addRow("GYM",state.gymSchedule,function(n){state.gymSchedule=n});addRow("MORNING WORKOUT",state.morningSchedule,function(n){state.morningSchedule=n});state.habits.forEach(function(h){addRow(h.name,h.schedule,function(n){h.schedule=n})})
+}
+function rangeStats(from,to){
+  var today=start(new Date()),end=key(to)>key(today)?today:to,done=0,planned=0,habitDone=0,habitPlanned=0,dietDone=0,dietPlanned=0,prayDone=0,prayPlanned=0;
+  if(key(from)>key(end))return null;
+  for(var d=start(from);key(d)<=key(end);d=addDays(d,1)){
+    var data=getDay(key(d));PR.forEach(function(p){prayPlanned++;var s=data.prayers[p[0]]||"unset";if(s==="done"||s==="late")prayDone++});
+    if(coreActiveOn("gym",d)&&state.gymSchedule.indexOf(iso(d))>=0){habitPlanned++;if(data.gym==="done"||data.gym==="late")habitDone++}
+    if(coreActiveOn("morning",d)&&state.morningSchedule.indexOf(iso(d))>=0){habitPlanned++;if(data.morning==="done"||data.morning==="late")habitDone++}
+    state.habits.forEach(function(h){if(itemActiveOn(h,d)&&h.schedule.indexOf(iso(d))>=0){habitPlanned++;var s=(data.habits||{})[h.id]||"unset";if(s==="done"||s==="late")habitDone++}});
+    state.diets.forEach(function(h){if(itemActiveOn(h,d)&&h.schedule.indexOf(iso(d))>=0){dietPlanned++;var s=(data.diets||{})[h.id]||"unset";if(s==="done"||s==="late")dietDone++}})
+  }
+  done=prayDone+habitDone+dietDone;planned=prayPlanned+habitPlanned+dietPlanned;
+  function pct(a,b){return b?Math.round(a/b*100):0}
+  return{done:done,planned:planned,pct:pct(done,planned),pray:[prayDone,prayPlanned,pct(prayDone,prayPlanned)],habit:[habitDone,habitPlanned,pct(habitDone,habitPlanned)],diet:[dietDone,dietPlanned,pct(dietDone,dietPlanned)]}
+}
+function openStats(){
+  var today=start(new Date()),monthStart=new Date(today.getFullYear(),today.getMonth(),1);
+  openModal("Statistika",'<div class="modalSection"><div class="formGrid"><div class="field"><label>Boshlanish sana</label><input id="fromDate" class="input" type="date" value="'+key(monthStart)+'" max="'+key(today)+'"></div><div class="field"><label>Tugash sana</label><input id="toDate" class="input" type="date" value="'+key(today)+'" max="'+key(today)+'"></div></div><div class="modalActions"><button id="calcStats" class="btn primary" type="button">Hisoblash</button></div></div><div id="statsOut"></div>');
+  q("calcStats").addEventListener("click",function(){var a=q("fromDate").value,b=q("toDate").value;if(!a||!b||a>b)return alert("Sana oralig‘ini to‘g‘ri tanlang.");var r=rangeStats(parseKey(a),parseKey(b));q("statsOut").innerHTML='<div class="modalSection"><div class="sectionTitle">Umumiy natija</div><div style="font-size:42px;font-weight:1000">'+r.pct+'%</div><div class="rowMeta">'+r.done+' / '+r.planned+' bajarildi</div></div><div class="statsResult"><div class="statCard"><small>Namoz</small><strong>'+r.pray[2]+'%</strong><small>'+r.pray[0]+'/'+r.pray[1]+'</small></div><div class="statCard"><small>Odatlar</small><strong>'+r.habit[2]+'%</strong><small>'+r.habit[0]+'/'+r.habit[1]+'</small></div><div class="statCard"><small>Diet</small><strong>'+r.diet[2]+'%</strong><small>'+r.diet[0]+'/'+r.diet[1]+'</small></div></div>'})
+}
+
+function clock(){
+  var now=new Date(),tf=new Intl.DateTimeFormat("uz-UZ",{timeZone:"Asia/Tashkent",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}),df=new Intl.DateTimeFormat("uz-UZ",{timeZone:"Asia/Tashkent",day:"2-digit",month:"2-digit",year:"numeric",weekday:"short"});
+  q("liveClock").textContent=tf.format(now);q("liveDate").textContent=df.format(now)
+}
+
 function setAuthMessage(text,type){var el=q("authMessage");el.textContent=text||"";el.className="authMessage"+(text?" show "+(type||""):"")}
 function showAuthMode(mode){q("loginForm").className="authForm"+(mode==="login"?"":" authHidden");q("registerForm").className="authForm"+(mode==="register"?"":" authHidden");q("resetForm").className="authForm"+(mode==="reset"?"":" authHidden");q("authTabs").style.display=mode==="reset"?"none":"grid";q("loginTab").className="authTab "+(mode==="login"?"active":"");q("registerTab").className="authTab "+(mode==="register"?"active":"");if(mode!=="reset")setAuthMessage("")}
-function authBusy(v){["loginBtn","registerBtn","resetBtn"].forEach(function(id){var el=q(id);if(el)el.disabled=v})}
+function authBusy(v){["loginBtn","registerBtn","resetBtn"].forEach(function(id){if(q(id))q(id).disabled=v})}
 function safeUsername(v){return String(v||"").trim().replace(/[^A-Za-z0-9._-]/g,"_").slice(0,30)}
-async function ensureProfile(user){var found=await sb.from("lockin_profiles").select("username").eq("user_id",user.id).maybeSingle();if(found.data&&found.data.username)return found.data.username;var base=safeUsername((user.user_metadata&&user.user_metadata.username)||(user.email||"").split("@")[0]);if(base.length<3)base="user_"+user.id.slice(0,6);var attempt=await sb.from("lockin_profiles").insert({user_id:user.id,username:base});if(attempt.error){base=(base.slice(0,24)+"_"+user.id.slice(0,5)).slice(0,30);await sb.from("lockin_profiles").upsert({user_id:user.id,username:base},{onConflict:"user_id"})}return base}
-async function loadCloudState(user){cloudLoading=true;KEY=BASE_KEY+":"+user.id;var localRaw=localStorage.getItem(KEY),candidate=localRaw?loadFromKey(KEY):null;var remote=await sb.from("lockin_state").select("data").eq("user_id",user.id).maybeSingle();if(!remote.error&&remote.data&&remote.data.data){state=normalizeState(remote.data.data)}else if(!remote.error){if(!candidate&&localStorage.getItem(BASE_KEY)&&!localStorage.getItem("lock-in:migrated-user")){candidate=loadFromKey(BASE_KEY);localStorage.setItem("lock-in:migrated-user",user.id)}state=candidate||normalizeState(null);await sb.from("lockin_state").upsert({user_id:user.id,data:state,updated_at:new Date().toISOString()},{onConflict:"user_id"})}else{state=candidate||normalizeState(null);setSyncStatus("Cloud ulanmagan · local rejim")}localStorage.setItem(KEY,JSON.stringify(state));cloudLoading=false}
-async function enterApp(user){if(!user)return;currentUser=user;if(activeUserId===user.id&&!q("appShell").classList.contains("appLocked"))return;activeUserId=user.id;q("authGate").className="authGate hidden";q("appShell").classList.remove("appLocked");setSyncStatus("Bulut bilan sinxronlanmoqda…");currentUsername=await ensureProfile(user);q("userNameLabel").textContent="@"+currentUsername;await loadCloudState(user);selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderWeek();renderRegions();renderAll(true);setSyncStatus("Cloud bilan sinxron")}
-function showLoggedOut(){currentUser=null;currentUsername="";activeUserId=null;KEY=BASE_KEY;q("appShell").classList.add("appLocked");q("authGate").className="authGate";showAuthMode("login")}
-async function doLogin(e){e.preventDefault();authBusy(true);setAuthMessage("");var email=q("loginEmail").value.trim(),password=q("loginPassword").value;var res=await sb.auth.signInWithPassword({email:email,password:password});authBusy(false);if(res.error){setAuthMessage("Kirish amalga oshmadi: "+res.error.message,"error");return}await enterApp(res.data.user)}
-async function doRegister(e){e.preventDefault();var username=safeUsername(q("registerUsername").value),email=q("registerEmail").value.trim(),p1=q("registerPassword").value,p2=q("registerPassword2").value;if(username.length<3){setAuthMessage("Username kamida 3 ta belgidan iborat bo‘lsin.","error");return}if(p1.length<8){setAuthMessage("Parol kamida 8 ta belgidan iborat bo‘lsin.","error");return}if(p1!==p2){setAuthMessage("Parollar bir xil emas.","error");return}authBusy(true);var res=await sb.auth.signUp({email:email,password:p1,options:{data:{username:username},emailRedirectTo:SITE_URL}});authBusy(false);if(res.error){setAuthMessage("Akkaunt yaratilmadi: "+res.error.message,"error");return}if(res.data.session&&res.data.user){await enterApp(res.data.user)}else{showAuthMode("login");q("loginEmail").value=email;setAuthMessage("Akkaunt yaratildi. Emailingizga kelgan tasdiqlash havolasini bosing, keyin kiring.","good")}}
-async function doForgot(){var email=q("loginEmail").value.trim();if(!email){setAuthMessage("Avval email manzilingizni kiriting.","error");q("loginEmail").focus();return}authBusy(true);var res=await sb.auth.resetPasswordForEmail(email,{redirectTo:SITE_URL});authBusy(false);if(res.error){setAuthMessage("Tiklash xati yuborilmadi: "+res.error.message,"error");return}setAuthMessage("Parolni tiklash havolasi emailingizga yuborildi.","good")}
-async function doReset(e){e.preventDefault();var p1=q("resetPassword").value,p2=q("resetPassword2").value;if(p1.length<8){setAuthMessage("Yangi parol kamida 8 ta belgidan iborat bo‘lsin.","error");return}if(p1!==p2){setAuthMessage("Parollar bir xil emas.","error");return}authBusy(true);var res=await sb.auth.updateUser({password:p1});authBusy(false);if(res.error){setAuthMessage("Parol yangilanmadi: "+res.error.message,"error");return}setAuthMessage("Parol muvaffaqiyatli yangilandi.","good");var ses=await sb.auth.getSession();if(ses.data.session)await enterApp(ses.data.session.user)}
-async function initAuth(){sb.auth.onAuthStateChange(function(event,session){setTimeout(function(){if(event==="PASSWORD_RECOVERY"){q("authGate").className="authGate";q("appShell").classList.add("appLocked");showAuthMode("reset");setAuthMessage("Yangi parol kiriting.","good")}else if(event==="SIGNED_OUT"){showLoggedOut()}else if(event==="SIGNED_IN"&&session&&session.user){enterApp(session.user)}},0)});var ses=await sb.auth.getSession();if(ses.data.session&&ses.data.session.user)await enterApp(ses.data.session.user);else showLoggedOut()}
-function renderWeek(){q("week").innerHTML=WDS.map(function(x){return "<div>"+x+"</div>"}).join("")}
-function renderRegions(){q("region").innerHTML=Object.keys(REGIONS).map(function(x){return "<option>"+x+"</option>"}).join("");q("region").value=state.region}
-function renderSchedule(id,prop){var box=q(id);box.innerHTML="";for(var i=1;i<=7;i++){(function(day){var b=document.createElement("button");b.className="toggle "+(state[prop].indexOf(day)>=0?"on":"");b.textContent=WDS[day-1];b.onclick=function(){var a=state[prop];state[prop]=a.indexOf(day)>=0?a.filter(function(x){return x!==day}):a.concat([day]).sort();save();renderAll(false)};box.appendChild(b)})(i)}}
-function trackState(d){var data=getDay(key(d)),marked=0,positive=0,expected=5;PR.forEach(function(p){var s=data.prayers[p[0]]||"unset";if(s!=="unset")marked++;if(s==="done"||s==="late")positive++});if(coreActiveOn("gym",d)&&state.gymSchedule.indexOf(iso(d))>=0){expected++;if(data.gym!=="unset")marked++;if(data.gym==="done")positive++}if(coreActiveOn("morning",d)&&state.morningSchedule.indexOf(iso(d))>=0){expected++;if(data.morning!=="unset")marked++;if(data.morning==="done")positive++}state.habits.forEach(function(h){if(!habitActiveOn(h,d)||(h.schedule||[]).indexOf(iso(d))<0)return;expected++;var s=data.habits[h.id]||"unset";if(s!=="unset")marked++;if(s==="done")positive++});if(!marked)return null;return positive===expected?"ok":"part"}
-function renderCal(){q("calTitle").textContent=monthTitle(cursor);var box=q("cal");box.innerHTML="";var y=cursor.getFullYear(),m=cursor.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,gs=new Date(y,m,1-offset),today=start(new Date());for(var i=0;i<42;i++){(function(d){var b=document.createElement("button"),t=trackState(d);b.className="day "+(d.getMonth()!==m?"out ":"")+(same(d,today)?"today ":"")+(same(d,selected)?"sel ":"");b.innerHTML="<span>"+d.getDate()+"</span>"+(t?"<span class='dayDot "+(t==="ok"?"ok":"")+"'></span>":"");b.onclick=function(){selected=start(d);if(selected.getMonth()!==cursor.getMonth()||selected.getFullYear()!==cursor.getFullYear())cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)};box.appendChild(b)})(new Date(gs.getFullYear(),gs.getMonth(),gs.getDate()+i))}}
-function makeStatuses(box,arr,current,onchange,disabled){box.innerHTML="";arr.forEach(function(s){var b=document.createElement("button");b.className="status "+(current===s[0]?"sel "+s[2]:"");b.textContent=s[1];b.disabled=!!disabled;b.onclick=function(){onchange(s[0])};box.appendChild(b)})}
-function renderPrayers(){var d=getDay(key(selected)),box=q("prayers");box.innerHTML="";PR.forEach(function(p){var row=document.createElement("div"),time=times&&times[p[2]]?times[p[2]]:"—:—";row.className="prayer";row.innerHTML="<div><strong>"+p[1]+"</strong><small>"+(times?"Tanlangan kun vaqti":"Vaqt yuklanmoqda")+"</small></div><div class='ptime'>"+time+"</div><div class='statuses'></div>";makeStatuses(row.querySelector(".statuses"),PSTATUS,d.prayers[p[0]]||"unset",function(v){ensure(key(selected)).prayers[p[0]]=v;save();renderAll(false)},false);box.appendChild(row)})}
-function monday(d){var x=start(d);x.setDate(x.getDate()-(iso(x)-1));return x}
-function weekly(kind){var st=monday(selected),sch=kind==="gym"?state.gymSchedule:state.morningSchedule,done=0,planned=0;for(var i=0;i<7;i++){var d=addDays(st,i);if(!notFuture(d)||!coreActiveOn(kind,d)||sch.indexOf(iso(d))<0)continue;planned++;if(getDay(key(d))[kind]==="done")done++}return [done,planned]}
-function label(val,arr){for(var i=0;i<arr.length;i++)if(arr[i][0]===val)return arr[i][1];return "Belgilanmagan"}
-function habitId(){return "h"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function habitWeek(h){var st=monday(selected),done=0,planned=0;for(var i=0;i<7;i++){var d=addDays(st,i);if(!notFuture(d)||!habitActiveOn(h,d)||(h.schedule||[]).indexOf(iso(d))<0)continue;planned++;if((getDay(key(d)).habits||{})[h.id]==="done")done++}return[done,planned]}
-function renderHabitDraftDays(){var box=q("habitDays");box.innerHTML="";for(var i=1;i<=7;i++){(function(day){var b=document.createElement("button");b.className="toggle "+(habitDraftDays.indexOf(day)>=0?"on":"");b.textContent=WDS[day-1];b.onclick=function(){habitDraftDays=habitDraftDays.indexOf(day)>=0?habitDraftDays.filter(function(x){return x!==day}):habitDraftDays.concat([day]).sort();renderHabitDraftDays()};box.appendChild(b)})(i)}q("habitDaysCount").textContent=habitDraftDays.length+" kun / hafta"}
-function openHabitForm(h){editingHabitId=h?h.id:null;habitDraftDays=h?(h.schedule||[]).slice():[1,2,3,4,5,6,7];q("habitName").value=h?h.name:"";q("habitForm").classList.remove("hidden");q("saveHabit").textContent=h?"O‘zgarishni saqlash":"Saqlash";renderHabitDraftDays();setTimeout(function(){q("habitName").focus()},30)}
-function closeHabitForm(){editingHabitId=null;q("habitForm").classList.add("hidden");q("habitName").value=""}
-function saveHabitFromForm(){var name=q("habitName").value.trim();if(!name){q("habitName").focus();return}if(!habitDraftDays.length){alert("Kamida bitta hafta kunini tanlang.");return}if(editingHabitId){var h=state.habits.find(function(x){return x.id===editingHabitId});if(h){h.name=name;h.schedule=habitDraftDays.slice()}}else{var created=key(start(new Date()));state.habits.push({id:habitId(),name:name,schedule:habitDraftDays.slice(),createdAt:created,activePeriods:[{start:created,end:null}]})}save();closeHabitForm();renderAll(false)}
-function toggleHabitPause(id){var h=state.habits.find(function(x){return x.id===id});if(!h)return;var today=start(new Date()),td=key(today),open=(h.activePeriods||[]).find(function(p){return !p.end});if(open){var end=key(addDays(today,-1));if(open.start===td)h.activePeriods=h.activePeriods.filter(function(p){return p!==open});else open.end=end}else{h.activePeriods=h.activePeriods||[];h.activePeriods.push({start:td,end:null})}save();renderAll(false)}
-function removeHabit(id){var h=state.habits.find(function(x){return x.id===id});if(!h)return;if(!confirm("“"+h.name+"” odatini o‘chirasizmi?"))return;state.habits=state.habits.filter(function(x){return x.id!==id});Object.keys(state.dayData).forEach(function(k){if(state.dayData[k].habits)delete state.dayData[k].habits[id]});save();renderAll(false)}
-function renderHabits(){var box=q("habitList");box.innerHTML="";if(!state.habits.length){box.innerHTML="<div class='emptyHabits' style='grid-column:1/-1'><strong>Hali odat qo‘shilmagan.</strong><div style='margin-top:6px'>Yuqoridagi “+ Odat qo‘shish” orqali birinchi odatingizni yarating.</div></div>";return}var d=getDay(key(selected)),dow=iso(selected);state.habits.forEach(function(h){var activeOnDate=habitActiveOn(h,selected),activeNow=habitIsActive(h),planned=activeOnDate&&(h.schedule||[]).indexOf(dow)>=0,w=habitWeek(h),item=document.createElement("div");item.className="habitItem "+(activeNow?"":"paused");item.innerHTML="<div class='habitItemTop'><div><div class='eyebrow'>Shaxsiy odat</div><h4></h4><span class='habitState "+(activeNow?"active":"paused")+"'>"+(activeNow?"Faol":"Vaqtincha to‘xtatilgan")+"</span></div><div class='miniActions'><button class='miniBtn toggle "+(activeNow?"pause":"resume")+"'>"+(activeNow?"To‘xtatish":"Qayta yoqish")+"</button><button class='miniBtn edit'>Tahrirlash</button><button class='miniBtn danger del'>O‘chirish</button></div></div><div class='habitDays'></div><div class='plan'></div><div class='scheduleTitle' style='margin-top:9px'><span class='muted'>Haftalik natija</span><strong>"+w[0]+"/"+w[1]+"</strong></div><div class='statuses'></div>";item.querySelector("h4").textContent=h.name;var chips=item.querySelector(".habitDays");for(var i=1;i<=7;i++){var s=document.createElement("span");s.className="dayChip "+((h.schedule||[]).indexOf(i)>=0?"on":"");s.textContent=WDS[i-1];chips.appendChild(s)}item.querySelector(".plan").textContent=!activeOnDate?"Bu sanada odat faol emas.":planned?WD[selected.getDay()]+" — bu odat rejalashtirilgan.":"Bu kun uchun rejalashtirilmagan.";makeStatuses(item.querySelector(".statuses"),HSTATUS,(d.habits||{})[h.id]||"unset",function(v){ensure(key(selected)).habits[h.id]=v;save();renderAll(false)},!planned);item.querySelector(".toggle").onclick=function(){toggleHabitPause(h.id)};item.querySelector(".edit").onclick=function(){openHabitForm(h)};item.querySelector(".del").onclick=function(){removeHabit(h.id)};box.appendChild(item)})}
-function ratio(done,planned){return planned?Math.round(done/planned*100):0}
-function categoryPeriodStats(kind,from,to){var today=start(new Date()),end=key(to)>key(today)?today:to,done=0,planned=0;if(key(from)>key(end))return{done:0,planned:0,pct:0};for(var d=start(from);key(d)<=key(end);d=addDays(d,1)){var data=getDay(key(d));if(kind==="gym"){if(coreActiveOn("gym",d)&&state.gymSchedule.indexOf(iso(d))>=0){planned++;if(data.gym==="done")done++}}else if(kind==="morning"){if(coreActiveOn("morning",d)&&state.morningSchedule.indexOf(iso(d))>=0){planned++;if(data.morning==="done")done++}}else if(kind==="habits"){state.habits.forEach(function(h){if(!habitActiveOn(h,d)||(h.schedule||[]).indexOf(iso(d))<0)return;planned++;if((data.habits||{})[h.id]==="done")done++})}}return{done:done,planned:planned,pct:ratio(done,planned)}}
-function rangeStats(from,to){var g=categoryPeriodStats("gym",from,to),m=categoryPeriodStats("morning",from,to),h=categoryPeriodStats("habits",from,to),done=g.done+m.done+h.done,planned=g.planned+m.planned+h.planned;return{done:done,planned:planned,pct:ratio(done,planned),gym:g,morning:m,habits:h}}
-function setRangeDefaults(){var today=start(new Date()),from=new Date(today.getFullYear(),today.getMonth(),1),max=key(today);q("rangeFrom").max=max;q("rangeTo").max=max;if(!q("rangeFrom").value)q("rangeFrom").value=key(from);if(!q("rangeTo").value)q("rangeTo").value=max}
-function renderRangeStats(){var err=q("rangeError"),fromVal=q("rangeFrom").value,toVal=q("rangeTo").value;err.className="rangeError";err.textContent="";if(!fromVal||!toVal){err.textContent="Boshlanish va tugash sanasini tanlang.";err.className="rangeError show";q("rangeResult").className="rangeResult";return}var from=parseKey(fromVal),to=parseKey(toVal),today=start(new Date());if(key(from)>key(to)){err.textContent="Boshlanish sana tugash sanasidan keyin bo‘lishi mumkin emas.";err.className="rangeError show";q("rangeResult").className="rangeResult";return}if(key(from)>key(today)){err.textContent="Kelajakdagi davr uchun statistika hisoblanmaydi.";err.className="rangeError show";q("rangeResult").className="rangeResult";return}if(key(to)>key(today)){to=today;q("rangeTo").value=key(today)}var r=rangeStats(from,to);q("rangePct").textContent=r.pct+"%";q("rangePeriod").textContent=pretty(from)+" — "+pretty(to);q("rangeCount").textContent=r.done+"/"+r.planned;q("rangeBar").style.width=r.pct+"%";q("rangeGym").textContent=r.gym.done+"/"+r.gym.planned+" · "+r.gym.pct+"%";q("rangeMorning").textContent=r.morning.done+"/"+r.morning.planned+" · "+r.morning.pct+"%";q("rangeHabits").textContent=r.habits.done+"/"+r.habits.planned+" · "+r.habits.pct+"%";q("rangeResult").className="rangeResult show"}
-function stats(){var d=getDay(key(selected)),p=0;PR.forEach(function(x){if(d.prayers[x[0]]==="done"||d.prayers[x[0]]==="late")p++});var gp=coreActiveOn("gym",selected)&&state.gymSchedule.indexOf(iso(selected))>=0,mp=coreActiveOn("morning",selected)&&state.morningSchedule.indexOf(iso(selected))>=0,habitPlanned=0,habitDone=0;state.habits.forEach(function(h){if(!habitActiveOn(h,selected)||(h.schedule||[]).indexOf(iso(selected))<0)return;habitPlanned++;if((d.habits||{})[h.id]==="done")habitDone++});var exp=5+(gp?1:0)+(mp?1:0)+habitPlanned,done=p+(gp&&d.gym==="done"?1:0)+(mp&&d.morning==="done"?1:0)+habitDone;return{d:d,p:p,gp:gp,mp:mp,habitPlanned:habitPlanned,habitDone:habitDone,pct:Math.round(done/exp*100)}}
-function renderSummary(){var s=stats(),today=same(selected,start(new Date()));q("heroTitle").textContent=today?"Bugunni boshqar. Keyin natija keladi.":"Tanlangan kunni aniq kuzat.";q("selectedDate").textContent=pretty(selected);q("sumPrayer").textContent=s.p+"/5";q("sumGym").textContent=s.gp?label(s.d.gym,GSTATUS):"Rejasiz";q("sumMorning").textContent=s.mp?label(s.d.morning,MSTATUS):"Rejasiz";q("sumHabits").textContent=s.habitDone+"/"+s.habitPlanned;q("sumOverall").textContent=s.pct+"%";q("overallPct").textContent=s.pct+"%";q("overallBar").style.width=s.pct+"%"}
-function renderTrackers(){var d=getDay(key(selected)),dow=iso(selected),gymActiveDate=coreActiveOn("gym",selected),morningActiveDate=coreActiveOn("morning",selected),gymActiveNow=coreIsActive("gym"),morningActiveNow=coreIsActive("morning"),gp=gymActiveDate&&state.gymSchedule.indexOf(dow)>=0,mp=morningActiveDate&&state.morningSchedule.indexOf(dow)>=0,gw=weekly("gym"),mw=weekly("morning");q("gymTracker").className="panel tracker "+(gymActiveNow?"":"paused");q("morningTracker").className="panel tracker "+(morningActiveNow?"":"paused");q("gymActivityState").className="trackerState "+(gymActiveNow?"active":"paused");q("gymActivityState").textContent=gymActiveNow?"Faol":"Vaqtincha to‘xtatilgan";q("morningActivityState").className="trackerState "+(morningActiveNow?"active":"paused");q("morningActivityState").textContent=morningActiveNow?"Faol":"Vaqtincha to‘xtatilgan";q("gymToggle").textContent=gymActiveNow?"To‘xtatish":"Qayta yoqish";q("gymToggle").className="miniBtn "+(gymActiveNow?"pause":"resume");q("morningToggle").textContent=morningActiveNow?"To‘xtatish":"Qayta yoqish";q("morningToggle").className="miniBtn "+(morningActiveNow?"pause":"resume");q("gymPlan").textContent=!gymActiveDate?"Bu sanada zal odati faol emas.":gp?WD[selected.getDay()]+" — zal kuni rejalashtirilgan.":"Bu kun uchun zal rejalashtirilmagan.";makeStatuses(q("gymStatus"),GSTATUS,d.gym||"unset",function(v){ensure(key(selected)).gym=v;save();renderAll(false)},!gp);q("morningPlan").textContent=!morningActiveDate?"Bu sanada ertalabgi mashg‘ulot faol emas.":mp?WD[selected.getDay()]+" — ertalabgi mashg‘ulot rejalashtirilgan.":"Bu kun uchun ertalabgi qo‘shimcha mashg‘ulot rejalashtirilmagan.";makeStatuses(q("morningStatus"),MSTATUS,d.morning||"unset",function(v){ensure(key(selected)).morning=v;save();renderAll(false)},!mp);q("gymWeek").textContent=gw[0]+"/"+gw[1]+" hafta";q("morningWeek").textContent=mw[0]+"/"+mw[1]+" hafta"}
-async function prayerFetch(){var my=++token,c=REGIONS[state.region]||REGIONS.Namangan,d=selected,dateKey=key(d),path=String(d.getDate()).padStart(2,"0")+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+d.getFullYear();times=null;q("source").textContent="Vaqtlar yuklanmoqda…";renderPrayers();try{var local=await fetch("./data/prayer-times.json?v="+Date.now(),{cache:"no-store"});if(local.ok){var cache=await local.json(),exact=cache&&cache.data&&cache.data[state.region]&&cache.data[state.region][dateKey];if(exact&&my===token){times=exact;var upd=cache.updated_at?new Date(cache.updated_at).toLocaleDateString("uz-UZ"):"";q("source").textContent="Manba: namozvaqti.uz · Book Media Nashr"+(upd?" · yangilangan "+upd:"");renderPrayers();return}}}catch(e){}try{var res=await fetch("https://api.aladhan.com/v1/timings/"+path+"?latitude="+c[0]+"&longitude="+c[1]+"&method=3&school=1");if(!res.ok)throw new Error();var json=await res.json();if(my!==token)return;times=json.data.timings;q("source").textContent="Fallback: hisoblangan vaqt · AlAdhan · Hanafi Asr";renderPrayers()}catch(e){if(my!==token)return;q("source").textContent="Vaqtlarni olishda xatolik. Internetni tekshiring.";renderPrayers()}}
-function clock(){var now=new Date(),tf=new Intl.DateTimeFormat("uz-UZ",{timeZone:"Asia/Tashkent",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}),p=new Intl.DateTimeFormat("uz-UZ",{timeZone:"Asia/Tashkent",year:"numeric",month:"numeric",day:"numeric",weekday:"long"}).formatToParts(now),map={};p.forEach(function(x){map[x.type]=x.value});q("liveClock").textContent=tf.format(now);q("liveDate").textContent=map.day+"-"+MONTHS[Math.max(0,Number(map.month)-1)]+", "+map.year+" • "+(map.weekday||"")}
-function renderAll(refetch){q("locationLabel").textContent=state.region;renderCal();renderSchedule("gymSchedule","gymSchedule");renderSchedule("morningSchedule","morningSchedule");q("gymCount").textContent=state.gymSchedule.length+" kun / hafta";q("morningCount").textContent=state.morningSchedule.length+" kun / hafta";renderPrayers();renderTrackers();renderHabits();renderSummary();if(refetch)prayerFetch()}
-q("prev").onclick=function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);renderCal()};q("next").onclick=function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1);renderCal()};q("today").onclick=function(){selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)};q("region").onchange=function(){state.region=this.value;save();renderAll(true)};q("retry").onclick=prayerFetch;q("gymToggle").onclick=function(){toggleCorePause("gym")};q("morningToggle").onclick=function(){toggleCorePause("morning")};q("toggleAnalytics").onclick=function(){var body=q("analyticsBody"),hidden=body.classList.contains("hidden");body.className="analyticsBody"+(hidden?"":" hidden");q("toggleAnalytics").textContent=hidden?"Yopish":"Statistikani ko‘rish";if(hidden){setRangeDefaults();q("rangeResult").className="rangeResult";q("rangeError").className="rangeError"}};q("calculateRange").onclick=renderRangeStats;q("addHabitBtn").onclick=function(){openHabitForm(null)};q("cancelHabit").onclick=closeHabitForm;q("saveHabit").onclick=saveHabitFromForm;q("habitName").onkeydown=function(e){if(e.key==="Enter")saveHabitFromForm()};
-q("loginTab").onclick=function(){showAuthMode("login")};q("registerTab").onclick=function(){showAuthMode("register")};q("loginForm").onsubmit=doLogin;q("registerForm").onsubmit=doRegister;q("resetForm").onsubmit=doReset;q("forgotBtn").onclick=doForgot;q("logoutBtn").onclick=function(){sb.auth.signOut()};clock();setInterval(clock,1000);initAuth();
+async function ensureProfile(user){var found=await sb.from("lockin_profiles").select("username").eq("user_id",user.id).maybeSingle();if(found.data&&found.data.username)return found.data.username;var base=safeUsername((user.user_metadata&&user.user_metadata.username)||(user.email||"").split("@")[0]);if(base.length<3)base="user_"+user.id.slice(0,6);var ins=await sb.from("lockin_profiles").insert({user_id:user.id,username:base});if(ins.error){base=(base.slice(0,24)+"_"+user.id.slice(0,5)).slice(0,30);await sb.from("lockin_profiles").upsert({user_id:user.id,username:base},{onConflict:"user_id"})}return base}
+async function loadCloud(user){
+  cloudLoading=true;KEY=BASE_KEY+":"+user.id;
+  var local=localStorage.getItem(KEY)?loadFromKey(KEY):null,remote=await sb.from("lockin_state").select("data").eq("user_id",user.id).maybeSingle();
+  if(!remote.error&&remote.data&&remote.data.data)state=normalizeState(remote.data.data);
+  else if(!remote.error){if(!local&&localStorage.getItem("lock-in:v1")&&!localStorage.getItem("lock-in:v2:migrated")){local=normalizeState(JSON.parse(localStorage.getItem("lock-in:v1")));localStorage.setItem("lock-in:v2:migrated",user.id)}state=local||normalizeState(null);await sb.from("lockin_state").upsert({user_id:user.id,data:state,updated_at:new Date().toISOString()},{onConflict:"user_id"})}
+  else state=local||normalizeState(null);
+  localStorage.setItem(KEY,JSON.stringify(state));cloudLoading=false
+}
+async function enterApp(user){if(!user)return;currentUser=user;if(activeUserId===user.id&&!q("appShell").classList.contains("appLocked"))return;activeUserId=user.id;q("authGate").className="authGate hidden";q("appShell").classList.remove("appLocked");currentUsername=await ensureProfile(user);q("menuUsername").textContent="@"+currentUsername;await loadCloud(user);selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderWeek();renderRegions();renderAll(true);setSync("Cloud bilan sinxron")}
+function showLoggedOut(){currentUser=null;activeUserId=null;KEY=BASE_KEY;q("appShell").classList.add("appLocked");q("authGate").className="authGate";showAuthMode("login")}
+async function doLogin(e){e.preventDefault();authBusy(true);var r=await sb.auth.signInWithPassword({email:q("loginEmail").value.trim(),password:q("loginPassword").value});authBusy(false);if(r.error)return setAuthMessage("Kirish amalga oshmadi: "+r.error.message,"error");await enterApp(r.data.user)}
+async function doRegister(e){e.preventDefault();var username=safeUsername(q("registerUsername").value),email=q("registerEmail").value.trim(),p1=q("registerPassword").value,p2=q("registerPassword2").value;if(username.length<3)return setAuthMessage("Username kamida 3 ta belgi bo‘lsin.","error");if(p1.length<8)return setAuthMessage("Parol kamida 8 ta belgi bo‘lsin.","error");if(p1!==p2)return setAuthMessage("Parollar bir xil emas.","error");authBusy(true);var r=await sb.auth.signUp({email:email,password:p1,options:{data:{username:username},emailRedirectTo:SITE_URL}});authBusy(false);if(r.error)return setAuthMessage("Akkaunt yaratilmadi: "+r.error.message,"error");if(r.data.session&&r.data.user)await enterApp(r.data.user);else{showAuthMode("login");q("loginEmail").value=email;setAuthMessage("Akkaunt yaratildi. Email tasdiqlash havolasini bosing, keyin kiring.","good")}}
+async function doForgot(){var email=q("loginEmail").value.trim();if(!email){setAuthMessage("Avval emailingizni kiriting.","error");return}var r=await sb.auth.resetPasswordForEmail(email,{redirectTo:SITE_URL});if(r.error)setAuthMessage("Tiklash xati yuborilmadi: "+r.error.message,"error");else setAuthMessage("Parolni tiklash havolasi emailingizga yuborildi.","good")}
+async function doReset(e){e.preventDefault();var p1=q("resetPassword").value,p2=q("resetPassword2").value;if(p1.length<8||p1!==p2)return setAuthMessage("Parollarni tekshiring.","error");var r=await sb.auth.updateUser({password:p1});if(r.error)return setAuthMessage("Parol yangilanmadi: "+r.error.message,"error");setAuthMessage("Parol yangilandi.","good");var ses=await sb.auth.getSession();if(ses.data.session)await enterApp(ses.data.session.user)}
+async function initAuth(){sb.auth.onAuthStateChange(function(event,session){setTimeout(function(){if(event==="PASSWORD_RECOVERY"){q("authGate").className="authGate";q("appShell").classList.add("appLocked");showAuthMode("reset")}else if(event==="SIGNED_OUT")showLoggedOut();else if(event==="SIGNED_IN"&&session&&session.user)enterApp(session.user)},0)});var ses=await sb.auth.getSession();if(ses.data.session&&ses.data.session.user)await enterApp(ses.data.session.user);else showLoggedOut()}
+
+q("prevMonth").addEventListener("click",function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);renderCalendar()});
+q("nextMonth").addEventListener("click",function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1);renderCalendar()});
+q("todayBtn").addEventListener("click",function(){selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)});
+q("menuBtn").addEventListener("click",function(e){e.stopPropagation();q("menu").classList.toggle("hidden")});
+document.addEventListener("click",function(e){if(!q("menuWrap")?.contains(e.target))q("menu").classList.add("hidden")});
+q("regionSelect").addEventListener("change",function(){state.region=this.value;save();fetchPrayerTimes();renderAll(false)});
+q("scheduleBtn").addEventListener("click",openScheduleModal);
+q("addHabitBtn").addEventListener("click",function(){openAddModal("habit")});
+q("addDietBtn").addEventListener("click",function(){openAddModal("diet")});
+q("statsBtn").addEventListener("click",function(){q("menu").classList.add("hidden");openStats()});
+q("modalClose").addEventListener("click",closeModal);
+q("modalBack").addEventListener("click",function(e){if(e.target===q("modalBack"))closeModal()});
+q("logoutBtn").addEventListener("click",function(){sb.auth.signOut()});
+q("loginTab").addEventListener("click",function(){showAuthMode("login")});
+q("registerTab").addEventListener("click",function(){showAuthMode("register")});
+q("loginForm").addEventListener("submit",doLogin);q("registerForm").addEventListener("submit",doRegister);q("resetForm").addEventListener("submit",doReset);q("forgotBtn").addEventListener("click",doForgot);
+clock();setInterval(clock,1000);initAuth();
 })();
 </script>
 </body>
