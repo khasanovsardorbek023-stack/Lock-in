@@ -85,7 +85,7 @@ button{touch-action:manipulation}
 .stateLate{color:#191303;background:var(--warn);border-color:var(--warn)}
 .stateMissed{color:#190606;background:var(--bad);border-color:var(--bad)}
 .stateUnset{color:var(--muted);background:#161c25}
-.stateOff{color:#bbb;background:#222731}
+.stateOff{color:#bbb;background:#222731}.stateNoDay{color:#d7dce3;background:#242a33;border-color:#39424e}
 .emptyState{height:100%;min-height:250px;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:12px;padding:22px}
 .modalBack{position:fixed;inset:0;background:rgba(2,4,7,.76);display:grid;place-items:center;padding:18px;z-index:100}
 .modal{width:min(760px,100%);max-height:90vh;overflow-y:auto;border:1px solid var(--line2);background:var(--menu-bg);border-radius:var(--r);box-shadow:0 30px 90px #000c}
@@ -391,20 +391,37 @@ function renderCalendar(){
   for(var i=0;i<42;i++){(function(d){var pr=dayProgress(d),b=document.createElement("button");b.type="button";b.className="day "+(d.getMonth()!==m?"out ":"")+(same(d,today)?"today ":"")+(same(d,selected)?"sel ":"");b.innerHTML="<span>"+d.getDate()+"</span>"+(pr.marked?'<span class="dayDot '+(pr.pct===100?"ok":"")+'"></span>':"");b.addEventListener("click",function(){selected=start(d);if(selected.getMonth()!==cursor.getMonth()||selected.getFullYear()!==cursor.getFullYear())cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)});box.appendChild(b)})(new Date(gridStart.getFullYear(),gridStart.getMonth(),gridStart.getDate()+i))}
 }
 function prayerSummary(){var d=getDay(key(selected)),done=0;PR.forEach(function(p){var s=d.prayers[p[0]]||"unset";if(s==="done"||s==="late")done++});return done+"/5"}
-function coreSummary(kind){var d=getDay(key(selected)),sch=kind==="gym"?state.gymSchedule:state.morningSchedule;if(!coreActiveOn(kind,selected))return"Faol emas";if(sch.indexOf(iso(selected))<0)return"Rejada emas";return statusInfo(d[kind]||"unset",false)[1]}
+function coreSummary(kind){var d=getDay(key(selected)),sch=kind==="gym"?state.gymSchedule:state.morningSchedule;if(!coreActiveOn(kind,selected))return"Bu sanada odat faol bo‘lmagan";if(sch.indexOf(iso(selected))<0)return"Bu kuni ushbu odat yo‘q";return statusInfo(d[kind]||"unset",false)[1]}
 function renderHabits(){
   var box=q("habitList"),d=getDay(key(selected)),rows=[];
   rows.push({type:"pray",name:"PRAY",meta:"5 mahal · "+prayerSummary(),status:""});
-  rows.push({type:"gym",name:"GYM",meta:coreSummary("gym"),status:d.gym||"unset",off:!coreIsActive("gym")});
-  rows.push({type:"morning",name:"MORNING WORKOUT",meta:coreSummary("morning"),status:d.morning||"unset",off:!coreIsActive("morning")});
-  state.habits.forEach(function(h){var planned=itemActiveOn(h,selected)&&h.schedule.indexOf(iso(selected))>=0;rows.push({type:"personal",item:h,name:h.name,meta:itemIsActive(h)?(planned?"Bugun rejalashtirilgan":"Bugun rejasiz"):"Faol emas",status:(d.habits||{})[h.id]||"unset",off:!itemIsActive(h)})});
+  var gymActive=coreActiveOn("gym",selected),gymScheduled=state.gymSchedule.indexOf(iso(selected))>=0;
+  var morningActive=coreActiveOn("morning",selected),morningScheduled=state.morningSchedule.indexOf(iso(selected))>=0;
+  rows.push({type:"gym",name:"GYM",meta:coreSummary("gym"),status:d.gym||"unset",off:!coreIsActive("gym"),planned:gymActive&&gymScheduled,noDay:gymActive&&!gymScheduled});
+  rows.push({type:"morning",name:"MORNING WORKOUT",meta:coreSummary("morning"),status:d.morning||"unset",off:!coreIsActive("morning"),planned:morningActive&&morningScheduled,noDay:morningActive&&!morningScheduled});
+  state.habits.forEach(function(h){
+    var activeOn=itemActiveOn(h,selected),scheduled=h.schedule.indexOf(iso(selected))>=0,planned=activeOn&&scheduled;
+    rows.push({type:"personal",item:h,name:h.name,meta:!activeOn?"Bu sanada odat faol bo‘lmagan":scheduled?"Bugun rejalashtirilgan":"Bu kuni ushbu odat yo‘q",status:(d.habits||{})[h.id]||"unset",off:!itemIsActive(h),planned:planned,noDay:activeOn&&!scheduled})
+  });
   box.innerHTML="";
-  rows.forEach(function(r,idx){var b=document.createElement("button");b.type="button";b.className="habitRow";var stateHtml=r.type==="pray"?'<span class="rowState stateUnset">'+prayerSummary()+'</span>':r.off?'<span class="rowState stateOff">Faol emas</span>':statusBadge(r.status,false);b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+stateHtml;b.querySelector(".rowName").textContent=r.name;b.querySelector(".rowMeta").textContent=r.meta;b.addEventListener("click",function(){if(r.type==="pray")openPrayerModal();else if(r.type==="gym"||r.type==="morning")openCoreModal(r.type);else openItemModal("habit",r.item)});box.appendChild(b)})
+  rows.forEach(function(r,idx){
+    var b=document.createElement("button");b.type="button";b.className="habitRow";
+    var stateHtml=r.type==="pray"?'<span class="rowState stateUnset">'+prayerSummary()+'</span>':r.off?'<span class="rowState stateOff">Faol emas</span>':r.noDay?'<span class="rowState stateNoDay">Bu kuni yo‘q</span>':!r.planned?'<span class="rowState stateOff">Faol emas</span>':statusBadge(r.status,false);
+    b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+stateHtml;
+    b.querySelector(".rowName").textContent=r.name;b.querySelector(".rowMeta").textContent=r.meta;
+    b.addEventListener("click",function(){if(r.type==="pray")openPrayerModal();else if(r.type==="gym"||r.type==="morning")openCoreModal(r.type);else openItemModal("habit",r.item)});box.appendChild(b)
+  })
 }
 function renderDiets(){
   var box=q("dietList"),d=getDay(key(selected));box.innerHTML="";
   if(!state.diets.length){box.innerHTML='<div class="emptyState"><div>Hali diet odati qo‘shilmagan.<br><br><strong>“Diet qo‘shish”</strong> tugmasidan boshlang.</div></div>';return}
-  state.diets.forEach(function(h,idx){var planned=itemActiveOn(h,selected)&&h.schedule.indexOf(iso(selected))>=0,s=(d.diets||{})[h.id]||"unset",b=document.createElement("button");b.type="button";b.className="dietRow";var badge=itemIsActive(h)?statusBadge(s,false):'<span class="rowState stateOff">Faol emas</span>';b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+badge;b.querySelector(".rowName").textContent=h.name;b.querySelector(".rowMeta").textContent=itemIsActive(h)?(planned?"Bugun rejalashtirilgan":"Bugun rejasiz"):"Faol emas";b.addEventListener("click",function(){openItemModal("diet",h)});box.appendChild(b)})
+  state.diets.forEach(function(h,idx){
+    var activeOn=itemActiveOn(h,selected),scheduled=h.schedule.indexOf(iso(selected))>=0,planned=activeOn&&scheduled,s=(d.diets||{})[h.id]||"unset",b=document.createElement("button");b.type="button";b.className="dietRow";
+    var badge=!itemIsActive(h)?'<span class="rowState stateOff">Faol emas</span>':activeOn&&!scheduled?'<span class="rowState stateNoDay">Bu kuni yo‘q</span>':!planned?'<span class="rowState stateOff">Faol emas</span>':statusBadge(s,false);
+    b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+badge;
+    b.querySelector(".rowName").textContent=h.name;b.querySelector(".rowMeta").textContent=!activeOn?"Bu sanada odat faol bo‘lmagan":scheduled?"Bugun rejalashtirilgan":"Bu kuni ushbu odat yo‘q";
+    b.addEventListener("click",function(){openItemModal("diet",h)});box.appendChild(b)
+  })
 }
 function renderTop(){var p=dayProgress(selected);q("dailyPct").textContent=p.pct+"%";q("dailyBar").style.width=p.pct+"%"}
 function renderRegions(){q("regionSelect").innerHTML=Object.keys(REGIONS).map(function(x){return "<option>"+x+"</option>"}).join("");q("regionSelect").value=state.region}
@@ -432,16 +449,18 @@ async function openPrayerModal(){
   PR.forEach(function(p){var row=document.createElement("div");row.className="prayerRow";row.innerHTML='<div class="prayerTop"><div class="prayerName">'+p[1]+'</div><div class="prayerTime">'+(prayerTimes&&prayerTimes[p[2]]?prayerTimes[p[2]]:"—:—")+'</div></div>';var s=(data.prayers||{})[p[0]]||"unset";row.appendChild(statusButtons(s,true,function(v){ensure(key(selected)).prayers[p[0]]=v;save();openPrayerModal();renderAll(false)}));list.appendChild(row)})
 }
 function openCoreModal(kind){
-  var isGym=kind==="gym",title=isGym?"GYM":"MORNING WORKOUT",schedule=isGym?state.gymSchedule:state.morningSchedule,active=coreIsActive(kind),data=getDay(key(selected)),current=data[kind]||"unset",planned=coreActiveOn(kind,selected)&&schedule.indexOf(iso(selected))>=0;
-  openModal(title+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+title+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="activeSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="coreStatus"></div></div>');
+  var isGym=kind==="gym",title=isGym?"GYM":"MORNING WORKOUT",schedule=isGym?state.gymSchedule:state.morningSchedule,active=coreIsActive(kind),activeOn=coreActiveOn(kind,selected),scheduled=schedule.indexOf(iso(selected))>=0,planned=activeOn&&scheduled,data=getDay(key(selected)),current=data[kind]||"unset";
+  var statusHtml=planned?'<div class="modalSection"><div class="sectionTitle">Tanlangan kun holati</div><div id="coreStatus"></div></div>':'<div class="modalSection"><div class="sectionTitle">Tanlangan kun holati</div><div class="emptyState" style="min-height:100px">'+(activeOn&&!scheduled?"Bu kuni ushbu odat yo‘q.":"Bu sanada ushbu odat faol bo‘lmagan.")+'</div></div>';
+  openModal(title+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+title+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="activeSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div>'+statusHtml);
   q("activeSwitch").addEventListener("click",function(){if(isGym)state.gymActivePeriods=togglePeriods(state.gymActivePeriods);else state.morningActivePeriods=togglePeriods(state.morningActivePeriods);save();openCoreModal(kind);renderAll(false)});
-  var st=statusButtons(current,false,function(v){ensure(key(selected))[kind]=v;save();openCoreModal(kind);renderAll(false)});if(!planned)Array.from(st.children).forEach(function(b){b.disabled=true});q("coreStatus").appendChild(st)
+  if(planned)q("coreStatus").appendChild(statusButtons(current,false,function(v){ensure(key(selected))[kind]=v;save();openCoreModal(kind);renderAll(false)}))
 }
 function openItemModal(type,item){
-  var field=type==="diet"?"diets":"habits",active=itemIsActive(item),planned=itemActiveOn(item,selected)&&item.schedule.indexOf(iso(selected))>=0,current=(getDay(key(selected))[field]||{})[item.id]||"unset";
-  openModal(item.name+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+item.name+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="itemSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div><div class="modalSection"><div class="sectionTitle">Tanlangan kun holati'+(planned?"":" · bu kun rejalashtirilmagan")+'</div><div id="itemStatus"></div></div><div class="modalActions"><button id="deleteItem" class="btn danger" type="button">O‘chirish</button></div>');
+  var field=type==="diet"?"diets":"habits",active=itemIsActive(item),activeOn=itemActiveOn(item,selected),scheduled=item.schedule.indexOf(iso(selected))>=0,planned=activeOn&&scheduled,current=(getDay(key(selected))[field]||{})[item.id]||"unset";
+  var statusHtml=planned?'<div class="modalSection"><div class="sectionTitle">Tanlangan kun holati</div><div id="itemStatus"></div></div>':'<div class="modalSection"><div class="sectionTitle">Tanlangan kun holati</div><div class="emptyState" style="min-height:100px">'+(activeOn&&!scheduled?"Bu kuni ushbu odat yo‘q.":"Bu sanada ushbu odat faol bo‘lmagan.")+'</div></div>';
+  openModal(item.name+' — '+pretty(selected),'<div class="modalSection"><div class="switchRow"><div><strong>'+item.name+'</strong><div class="rowMeta">'+(active?"Faol":"Vaqtincha to‘xtatilgan")+'</div></div><button id="itemSwitch" class="switch '+(active?"on":"")+'" type="button"></button></div></div>'+statusHtml+'<div class="modalActions"><button id="deleteItem" class="btn danger" type="button">O‘chirish</button></div>');
   q("itemSwitch").addEventListener("click",function(){item.activePeriods=togglePeriods(item.activePeriods||[]);save();openItemModal(type,item);renderAll(false)});
-  var st=statusButtons(current,false,function(v){ensure(key(selected))[field][item.id]=v;save();openItemModal(type,item);renderAll(false)});if(!planned)Array.from(st.children).forEach(function(b){b.disabled=true});q("itemStatus").appendChild(st);
+  if(planned)q("itemStatus").appendChild(statusButtons(current,false,function(v){ensure(key(selected))[field][item.id]=v;save();openItemModal(type,item);renderAll(false)}));
   q("deleteItem").addEventListener("click",function(){if(!confirm("“"+item.name+"” ni o‘chirasizmi?"))return;var arr=type==="diet"?state.diets:state.habits;if(type==="diet")state.diets=arr.filter(function(x){return x.id!==item.id});else state.habits=arr.filter(function(x){return x.id!==item.id});Object.keys(state.dayData).forEach(function(k){var dd=state.dayData[k]&&state.dayData[k][field];if(dd)delete dd[item.id]});save();closeModal();renderAll(false)})
 }
 function openAddModal(type){
