@@ -394,19 +394,24 @@ function prayerSummary(){var d=getDay(key(selected)),done=0;PR.forEach(function(
 function coreSummary(kind){var d=getDay(key(selected)),sch=kind==="gym"?state.gymSchedule:state.morningSchedule;if(!coreActiveOn(kind,selected))return"Bu sanada odat faol bo‘lmagan";if(sch.indexOf(iso(selected))<0)return"Bu kuni ushbu odat yo‘q";return statusInfo(d[kind]||"unset",false)[1]}
 function renderHabits(){
   var box=q("habitList"),d=getDay(key(selected)),rows=[];
-  rows.push({type:"pray",name:"PRAY",meta:"5 mahal · "+prayerSummary(),status:""});
-  var gymActive=coreActiveOn("gym",selected),gymScheduled=state.gymSchedule.indexOf(iso(selected))>=0;
-  var morningActive=coreActiveOn("morning",selected),morningScheduled=state.morningSchedule.indexOf(iso(selected))>=0;
-  rows.push({type:"gym",name:"GYM",meta:coreSummary("gym"),status:d.gym||"unset",off:!coreIsActive("gym"),planned:gymActive&&gymScheduled,noDay:gymActive&&!gymScheduled});
-  rows.push({type:"morning",name:"MORNING WORKOUT",meta:coreSummary("morning"),status:d.morning||"unset",off:!coreIsActive("morning"),planned:morningActive&&morningScheduled,noDay:morningActive&&!morningScheduled});
+  rows.push({type:"pray",name:"PRAY",meta:"5 mahal · "+prayerSummary(),status:"",planned:true});
+
+  var gymPlanned=coreActiveOn("gym",selected)&&state.gymSchedule.indexOf(iso(selected))>=0;
+  var morningPlanned=coreActiveOn("morning",selected)&&state.morningSchedule.indexOf(iso(selected))>=0;
+
+  if(gymPlanned)rows.push({type:"gym",name:"GYM",meta:"Shu kunga rejalashtirilgan",status:d.gym||"unset",planned:true});
+  if(morningPlanned)rows.push({type:"morning",name:"MORNING WORKOUT",meta:"Shu kunga rejalashtirilgan",status:d.morning||"unset",planned:true});
+
   state.habits.forEach(function(h){
-    var activeOn=itemActiveOn(h,selected),scheduled=h.schedule.indexOf(iso(selected))>=0,planned=activeOn&&scheduled;
-    rows.push({type:"personal",item:h,name:h.name,meta:!activeOn?"Bu sanada odat faol bo‘lmagan":scheduled?"Bugun rejalashtirilgan":"Bu kuni ushbu odat yo‘q",status:(d.habits||{})[h.id]||"unset",off:!itemIsActive(h),planned:planned,noDay:activeOn&&!scheduled})
+    var planned=itemActiveOn(h,selected)&&h.schedule.indexOf(iso(selected))>=0;
+    if(!planned)return;
+    rows.push({type:"personal",item:h,name:h.name,meta:"Shu kunga rejalashtirilgan",status:(d.habits||{})[h.id]||"unset",planned:true})
   });
+
   box.innerHTML="";
   rows.forEach(function(r,idx){
     var b=document.createElement("button");b.type="button";b.className="habitRow";
-    var stateHtml=r.type==="pray"?'<span class="rowState stateUnset">'+prayerSummary()+'</span>':r.off?'<span class="rowState stateOff">Faol emas</span>':r.noDay?'<span class="rowState stateNoDay">Bu kuni yo‘q</span>':!r.planned?'<span class="rowState stateOff">Faol emas</span>':statusBadge(r.status,false);
+    var stateHtml=r.type==="pray"?'<span class="rowState stateUnset">'+prayerSummary()+'</span>':statusBadge(r.status,false);
     b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+stateHtml;
     b.querySelector(".rowName").textContent=r.name;b.querySelector(".rowMeta").textContent=r.meta;
     b.addEventListener("click",function(){if(r.type==="pray")openPrayerModal();else if(r.type==="gym"||r.type==="morning")openCoreModal(r.type);else openItemModal("habit",r.item)});box.appendChild(b)
@@ -414,12 +419,15 @@ function renderHabits(){
 }
 function renderDiets(){
   var box=q("dietList"),d=getDay(key(selected));box.innerHTML="";
-  if(!state.diets.length){box.innerHTML='<div class="emptyState"><div>Hali diet odati qo‘shilmagan.<br><br><strong>“Diet qo‘shish”</strong> tugmasidan boshlang.</div></div>';return}
-  state.diets.forEach(function(h,idx){
-    var activeOn=itemActiveOn(h,selected),scheduled=h.schedule.indexOf(iso(selected))>=0,planned=activeOn&&scheduled,s=(d.diets||{})[h.id]||"unset",b=document.createElement("button");b.type="button";b.className="dietRow";
-    var badge=!itemIsActive(h)?'<span class="rowState stateOff">Faol emas</span>':activeOn&&!scheduled?'<span class="rowState stateNoDay">Bu kuni yo‘q</span>':!planned?'<span class="rowState stateOff">Faol emas</span>':statusBadge(s,false);
-    b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+badge;
-    b.querySelector(".rowName").textContent=h.name;b.querySelector(".rowMeta").textContent=!activeOn?"Bu sanada odat faol bo‘lmagan":scheduled?"Bugun rejalashtirilgan":"Bu kuni ushbu odat yo‘q";
+  var plannedDiets=state.diets.filter(function(h){return itemActiveOn(h,selected)&&h.schedule.indexOf(iso(selected))>=0});
+  if(!plannedDiets.length){
+    box.innerHTML='<div class="emptyState"><div>Bu kunga diet odati rejalashtirilmagan.</div></div>';
+    return
+  }
+  plannedDiets.forEach(function(h,idx){
+    var s=(d.diets||{})[h.id]||"unset",b=document.createElement("button");b.type="button";b.className="dietRow";
+    b.innerHTML='<span class="rowNum">'+(idx+1)+'</span><span><div class="rowName"></div><div class="rowMeta"></div></span>'+statusBadge(s,false);
+    b.querySelector(".rowName").textContent=h.name;b.querySelector(".rowMeta").textContent="Shu kunga rejalashtirilgan";
     b.addEventListener("click",function(){openItemModal("diet",h)});box.appendChild(b)
   })
 }
