@@ -57,6 +57,11 @@ button{touch-action:manipulation}
 .panel{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 34%),var(--panel);border-radius:var(--r);box-shadow:var(--shadow)}
 .panelHead{height:46px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);font-size:13px;font-weight:1000;letter-spacing:.2em;text-transform:uppercase}
 .calendarPanel{overflow:hidden}
+.calendarToggle{width:100%;border:0;background:transparent;color:var(--text);cursor:pointer;position:relative}
+.calendarToggle:hover{background:color-mix(in srgb,var(--accent) 5%,transparent)}
+.calendarToggle .calendarChevron{position:absolute;right:16px;font-size:15px;color:var(--muted);transition:transform .18s ease}
+.calendarToggle[aria-expanded="true"] .calendarChevron{transform:rotate(180deg)}
+.calendarContent{overflow:hidden}
 .calTop{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 12px 5px}
 .calTitle{font-size:15px;font-weight:1000}
 .miniControls{display:flex;gap:5px}
@@ -238,9 +243,11 @@ button{touch-action:manipulation}
   <section class="layout">
     <div id="calendarCol" class="calendarCol">
       <section class="panel calendarPanel">
-        <div class="panelHead">DATE</div>
-        <div class="calTop"><div id="calTitle" class="calTitle">—</div><div class="miniControls"><button id="prevMonth" class="iconBtn" type="button">←</button><button id="todayBtn" class="smallBtn" type="button">Bugun</button><button id="nextMonth" class="iconBtn" type="button">→</button></div></div>
-        <div id="week" class="week"></div><div id="cal" class="cal"></div>
+        <button id="calendarToggle" class="panelHead calendarToggle" type="button" aria-expanded="false"><span>DATE</span><span class="calendarChevron">⌄</span></button>
+        <div id="calendarContent" class="calendarContent hidden">
+          <div class="calTop"><div id="calTitle" class="calTitle">—</div><div class="miniControls"><button id="prevMonth" class="iconBtn" type="button">←</button><button id="todayBtn" class="smallBtn" type="button">Bugun</button><button id="nextMonth" class="iconBtn" type="button">→</button></div></div>
+          <div id="week" class="week"></div><div id="cal" class="cal"></div>
+        </div>
       </section>
       <div id="quickActions" class="quickActions">
         <button id="scheduleBtn" class="quickBtn" type="button">Odat va diet kunlarini sozlash</button>
@@ -611,7 +618,7 @@ async function loadCloud(user){
   else state=local||normalizeState(null);
   localStorage.setItem(KEY,JSON.stringify(state));cloudLoading=false
 }
-async function enterApp(user){if(!user)return;currentUser=user;if(activeUserId===user.id&&!q("appShell").classList.contains("appLocked"))return;activeUserId=user.id;q("authGate").className="authGate hidden";q("appShell").classList.remove("appLocked");currentUsername=await ensureProfile(user);q("menuUsername").textContent="@"+currentUsername;await loadCloud(user);applyDesign(state.design);selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderWeek();renderRegions();renderAll(true);setSync("Cloud bilan sinxron")}
+async function enterApp(user){if(!user)return;currentUser=user;if(activeUserId===user.id&&!q("appShell").classList.contains("appLocked"))return;activeUserId=user.id;q("authGate").className="authGate hidden";q("appShell").classList.remove("appLocked");currentUsername=await ensureProfile(user);q("menuUsername").textContent="@"+currentUsername;await loadCloud(user);applyDesign(state.design);selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderWeek();renderRegions();renderAll(true);setCalendarOpen(false);setSync("Cloud bilan sinxron")}
 function showLoggedOut(){currentUser=null;activeUserId=null;KEY=BASE_KEY;q("appShell").classList.add("appLocked");q("authGate").className="authGate";showAuthMode("login")}
 async function doLogin(e){e.preventDefault();authBusy(true);var r=await sb.auth.signInWithPassword({email:q("loginEmail").value.trim(),password:q("loginPassword").value});authBusy(false);if(r.error)return setAuthMessage("Kirish amalga oshmadi: "+r.error.message,"error");await enterApp(r.data.user)}
 async function doRegister(e){e.preventDefault();var username=safeUsername(q("registerUsername").value),email=q("registerEmail").value.trim(),p1=q("registerPassword").value,p2=q("registerPassword2").value;if(username.length<3)return setAuthMessage("Username kamida 3 ta belgi bo‘lsin.","error");if(p1.length<8)return setAuthMessage("Parol kamida 8 ta belgi bo‘lsin.","error");if(p1!==p2)return setAuthMessage("Parollar bir xil emas.","error");authBusy(true);var r=await sb.auth.signUp({email:email,password:p1,options:{data:{username:username},emailRedirectTo:SITE_URL}});authBusy(false);if(r.error)return setAuthMessage("Akkaunt yaratilmadi: "+r.error.message,"error");if(r.data.session&&r.data.user)await enterApp(r.data.user);else{showAuthMode("login");q("loginEmail").value=email;setAuthMessage("Akkaunt yaratildi. Email tasdiqlash havolasini bosing, keyin kiring.","good")}}
@@ -619,6 +626,13 @@ async function doForgot(){var email=q("loginEmail").value.trim();if(!email){setA
 async function doReset(e){e.preventDefault();var p1=q("resetPassword").value,p2=q("resetPassword2").value;if(p1.length<8||p1!==p2)return setAuthMessage("Parollarni tekshiring.","error");var r=await sb.auth.updateUser({password:p1});if(r.error)return setAuthMessage("Parol yangilanmadi: "+r.error.message,"error");setAuthMessage("Parol yangilandi.","good");var ses=await sb.auth.getSession();if(ses.data.session)await enterApp(ses.data.session.user)}
 async function initAuth(){sb.auth.onAuthStateChange(function(event,session){setTimeout(function(){if(event==="PASSWORD_RECOVERY"){q("authGate").className="authGate";q("appShell").classList.add("appLocked");showAuthMode("reset")}else if(event==="SIGNED_OUT")showLoggedOut();else if(event==="SIGNED_IN"&&session&&session.user)enterApp(session.user)},0)});var ses=await sb.auth.getSession();if(ses.data.session&&ses.data.session.user)await enterApp(ses.data.session.user);else showLoggedOut()}
 
+function setCalendarOpen(open){
+  q("calendarContent").classList.toggle("hidden",!open);
+  q("calendarToggle").setAttribute("aria-expanded",open?"true":"false")
+}
+q("calendarToggle").addEventListener("click",function(){
+  setCalendarOpen(q("calendarToggle").getAttribute("aria-expanded")!=="true")
+});
 q("prevMonth").addEventListener("click",function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);renderCalendar()});
 q("nextMonth").addEventListener("click",function(){cursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1);renderCalendar()});
 q("todayBtn").addEventListener("click",function(){selected=start(new Date());cursor=new Date(selected.getFullYear(),selected.getMonth(),1);renderAll(true)});
