@@ -99,6 +99,18 @@ button{touch-action:manipulation}
 .todoRow{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:11px 12px;margin-bottom:8px;cursor:pointer;text-align:left}
 .todoRow:hover{border-color:#44505e}.todoText{font-size:14px;font-weight:900;line-height:1.3}.todoMeta{font-size:10px;color:var(--muted);margin-top:4px}.todoRow.done .todoText{text-decoration:line-through;opacity:.72}
 .expenseList{display:grid;gap:8px;margin-top:10px}.expenseRow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:9px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px}.expenseNote{font-size:12px;font-weight:800;overflow-wrap:anywhere}.expenseAmount{font-size:12px;font-weight:1000;white-space:nowrap}.miniDanger{border:1px solid var(--line);background:var(--control);color:#ff9999;border-radius:8px;padding:7px 9px;cursor:pointer;font-size:10px;font-weight:900}.moneySummary{font-size:28px;font-weight:1000}.planStatusGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.moneyCalcGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.moneyCalcCard{border:1px solid var(--line);background:var(--surface);border-radius:13px;padding:12px;min-width:0}
+.moneyCalcCard small{display:block;color:var(--muted);font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.moneyCalcCard strong{display:block;font-size:18px;margin-top:6px;overflow-wrap:anywhere}
+.moneyPeriod{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.35}
+.moneyDayHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.moneyDayTotal{font-size:26px;font-weight:1000}
+.moneyDayCount{font-size:10px;color:var(--muted)}
+.moneyReasonList{display:grid;gap:8px;margin-top:12px}
+.moneyReasonRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:10px 11px}
+.moneyReasonText{font-size:12px;font-weight:800;overflow-wrap:anywhere}
+.moneyReasonAmount{font-size:12px;font-weight:1000;white-space:nowrap}
 .modalBack{position:fixed;inset:0;background:rgba(2,4,7,.76);display:grid;place-items:center;padding:18px;z-index:100}
 .modal{width:min(760px,100%);max-height:90vh;overflow-y:auto;border:1px solid var(--line2);background:var(--menu-bg);border-radius:var(--r);box-shadow:0 30px 90px #000c}
 .modalHead{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
@@ -193,7 +205,7 @@ button{touch-action:manipulation}
   .shell{width:min(100% - 16px,var(--shell-max));padding-top:8px}
   .topbar{flex-wrap:wrap}.brandBox{order:1;flex:1 1 calc(100% - 64px)}.menuWrap{order:2}.spendBox{order:3;flex:1 1 170px}.timeBox{order:4;flex:1 1 160px}.progressBox{order:5;flex:2 1 230px}.timeBox,.progressBox,.spendBox{min-height:72px}
   .habitsPanel .scrollBody{height:min(var(--habit-h),420px)}.dietPanel .scrollBody{height:min(var(--diet-h),360px)}.todoPanel .scrollBody{height:min(var(--todo-h),390px)}
-  .statusGrid,.prayerRow .statusGrid{grid-template-columns:1fr 1fr}.planStatusGrid{grid-template-columns:1fr}.days{grid-template-columns:repeat(4,1fr)}.formGrid,.statsResult,.designGrid{grid-template-columns:1fr}.presetGrid{grid-template-columns:1fr 1fr}.visibilityGrid{grid-template-columns:1fr}
+  .statusGrid,.prayerRow .statusGrid{grid-template-columns:1fr 1fr}.planStatusGrid{grid-template-columns:1fr}.moneyCalcGrid{grid-template-columns:1fr 1fr}.days{grid-template-columns:repeat(4,1fr)}.formGrid,.statsResult,.designGrid{grid-template-columns:1fr}.presetGrid{grid-template-columns:1fr 1fr}.visibilityGrid{grid-template-columns:1fr}
   .menu{width:min(285px,calc(100vw - 26px))}
 }
 </style>
@@ -255,6 +267,7 @@ button{touch-action:manipulation}
         <button id="addDietBtn" class="quickBtn" type="button">Diet qo‘shish</button>
         <button id="plansBtn" class="quickBtn" type="button">Plans</button>
         <button id="moneyBtn" class="quickBtn" type="button">Money spending</button>
+        <button id="calculateMoneyBtn" class="quickBtn" type="button">Calculate money</button>
       </div>
     </div>
 
@@ -398,6 +411,23 @@ function openDesignEditor(){
 
 function formatMoney(n){return new Intl.NumberFormat("uz-UZ",{maximumFractionDigits:0}).format(Math.round(Number(n)||0))+" so‘m"}
 function spendingTotalFor(k){return getDay(k).spending.reduce(function(sum,x){return sum+(Number(x.amount)||0)},0)}
+function spendingTotalBetween(from,to){
+  var total=0,a=start(from),b=start(to);
+  if(key(a)>key(b)){var t=a;a=b;b=t}
+  for(var d=a;key(d)<=key(b);d=addDays(d,1))total+=spendingTotalFor(key(d));
+  return total
+}
+function allTimeSpendingTotal(){
+  return Object.keys(state.dayData||{}).reduce(function(sum,k){return sum+spendingTotalFor(k)},0)
+}
+function mondayOf(d){var x=start(d),n=(x.getDay()+6)%7;return addDays(x,-n)}
+function sundayOf(d){return addDays(mondayOf(d),6)}
+function monthStartOf(d){return new Date(d.getFullYear(),d.getMonth(),1)}
+function monthEndOf(d){return new Date(d.getFullYear(),d.getMonth()+1,0)}
+function yearStartOf(d){return new Date(d.getFullYear(),0,1)}
+function yearEndOf(d){return new Date(d.getFullYear(),11,31)}
+function shortDate(d){return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear()}
+
 function planStatusBadge(v){if(v==="done")return '<span class="rowState stateDone">Bajarildi</span>';if(v==="missed")return '<span class="rowState stateMissed">Bajarilmadi</span>';return '<span class="rowState stateUnset">Belgilanmagan</span>'}
 function planStatusButtons(current,onChange){
   var arr=[["unset","Belgilanmagan","unset"],["done","Bajarildi","done"],["missed","Bajarilmadi","missed"]],wrap=document.createElement("div");wrap.className="planStatusGrid";
@@ -570,6 +600,33 @@ function openMoneyModal(dateKey){
   q("addExpense").addEventListener("click",function(){var k=q("moneyDate").value,amount=Math.round(Number(q("moneyAmount").value)),note=q("moneyNote").value.trim();if(!k)return alert("Sanani tanlang.");if(!(amount>0))return q("moneyAmount").focus();if(!note)return q("moneyNote").focus();ensure(k).spending.push({id:uuid(),amount:amount,note:note,createdAt:new Date().toISOString()});q("moneyAmount").value="";q("moneyNote").value="";save();draw();renderAll(false)});
   draw()
 }
+
+function openCalculateMoneyModal(dateKey){
+  var dk=dateKey||key(selected);
+  openModal("Calculate money",'<div class="modalSection"><div class="field"><label>Hisob uchun sana</label><input id="calcMoneyDate" class="input" type="date" value="'+dk+'"></div><div class="designHint">Haftalik, oylik va yillik hisob shu tanlangan sana joylashgan davr bo‘yicha hisoblanadi.</div></div><div id="moneyCalcSummary"></div><div id="moneyCalcDay"></div>');
+  function draw(){
+    var k=q("calcMoneyDate").value||dk,d=parseKey(k),weekA=mondayOf(d),weekB=sundayOf(d),monthA=monthStartOf(d),monthB=monthEndOf(d),yearA=yearStartOf(d),yearB=yearEndOf(d);
+    var all=allTimeSpendingTotal(),week=spendingTotalBetween(weekA,weekB),month=spendingTotalBetween(monthA,monthB),year=spendingTotalBetween(yearA,yearB);
+    q("moneyCalcSummary").innerHTML=
+      '<div class="modalSection"><div class="sectionTitle">Xarajatlar hisobi</div><div class="moneyCalcGrid">'+
+      '<div class="moneyCalcCard"><small>Umumiy summa</small><strong>'+formatMoney(all)+'</strong><div class="moneyPeriod">Barcha kiritilgan xarajatlar</div></div>'+
+      '<div class="moneyCalcCard"><small>Haftalik</small><strong>'+formatMoney(week)+'</strong><div class="moneyPeriod">'+shortDate(weekA)+' — '+shortDate(weekB)+'</div></div>'+
+      '<div class="moneyCalcCard"><small>Oylik</small><strong>'+formatMoney(month)+'</strong><div class="moneyPeriod">'+MONTHS[d.getMonth()]+' '+d.getFullYear()+'</div></div>'+
+      '<div class="moneyCalcCard"><small>Yillik</small><strong>'+formatMoney(year)+'</strong><div class="moneyPeriod">'+d.getFullYear()+'-yil</div></div>'+
+      '</div></div>';
+    var day=getDay(k),items=day.spending||[],html='<div class="modalSection"><div class="sectionTitle">Tanlangan kun tafsilotlari</div><div class="moneyDayHead"><div><div class="moneyDayTotal">'+formatMoney(spendingTotalFor(k))+'</div><div class="moneyDayCount">'+items.length+' ta xarajat · '+pretty(d)+'</div></div></div><div class="moneyReasonList">';
+    if(!items.length)html+='<div class="rowMeta">Bu sanada xarajat kiritilmagan.</div>';
+    else items.forEach(function(x){html+='<div class="moneyReasonRow"><div class="moneyReasonText"></div><div class="moneyReasonAmount">'+formatMoney(x.amount)+'</div></div>'});
+    html+='</div></div>';
+    q("moneyCalcDay").innerHTML=html;
+    if(items.length){
+      var rows=q("moneyCalcDay").querySelectorAll(".moneyReasonRow");
+      items.forEach(function(x,i){rows[i].querySelector(".moneyReasonText").textContent=x.note})
+    }
+  }
+  q("calcMoneyDate").addEventListener("change",draw);
+  draw()
+}
 function openScheduleModal(){
   openModal("Odat va diet kunlarini sozlash",'<div class="modalSection"><div class="sectionTitle">Odatlar</div><div id="habitScheduleList" class="scheduleList"></div></div><div class="modalSection"><div class="sectionTitle">Diet</div><div id="dietScheduleList" class="scheduleList"></div></div>');
   function addRow(host,name,schedule,onChange){var row=document.createElement("div");row.className="scheduleItem";row.innerHTML='<div class="scheduleName"></div><div class="daysHost"></div>';row.querySelector(".scheduleName").textContent=name;row.querySelector(".daysHost").appendChild(daysEditor(schedule.slice(),function(n){onChange(n);save();openScheduleModal();renderAll(false)}));host.appendChild(row)}
@@ -644,6 +701,7 @@ q("addHabitBtn").addEventListener("click",function(){openAddModal("habit")});
 q("addDietBtn").addEventListener("click",function(){openAddModal("diet")});
 q("plansBtn").addEventListener("click",function(){openPlansModal(key(selected))});
 q("moneyBtn").addEventListener("click",function(){openMoneyModal(key(selected))});
+q("calculateMoneyBtn").addEventListener("click",function(){openCalculateMoneyModal(key(selected))});
 q("designBtn").addEventListener("click",function(){q("menu").classList.add("hidden");openDesignEditor()});
 q("statsBtn").addEventListener("click",function(){q("menu").classList.add("hidden");openStats()});
 q("modalClose").addEventListener("click",closeModal);
