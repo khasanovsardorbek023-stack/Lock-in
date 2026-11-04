@@ -111,6 +111,15 @@ button{touch-action:manipulation}
 .moneyReasonRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:10px 11px}
 .moneyReasonText{font-size:12px;font-weight:800;overflow-wrap:anywhere}
 .moneyReasonAmount{font-size:12px;font-weight:1000;white-space:nowrap}
+.notesList{display:grid;gap:9px;margin-top:10px}
+.noteCard{border:1px solid var(--line);background:var(--surface);border-radius:13px;padding:12px}
+.noteHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.noteTitle{font-size:14px;font-weight:1000;overflow-wrap:anywhere}
+.noteDate{font-size:9px;color:var(--muted);white-space:nowrap}
+.noteBody{font-size:12px;color:var(--text);line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px}
+.noteActions{display:flex;gap:6px;margin-top:10px;justify-content:flex-end}
+.noteTextarea{min-height:150px;resize:vertical;line-height:1.5}
+
 .modalBack{position:fixed;inset:0;background:rgba(2,4,7,.76);display:grid;place-items:center;padding:18px;z-index:100}
 .modal{width:min(760px,100%);max-height:90vh;overflow-y:auto;border:1px solid var(--line2);background:var(--menu-bg);border-radius:var(--r);box-shadow:0 30px 90px #000c}
 .modalHead{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
@@ -262,12 +271,13 @@ button{touch-action:manipulation}
         </div>
       </section>
       <div id="quickActions" class="quickActions">
+        <button id="moneyBtn" class="quickBtn" type="button">Money spending</button>
         <button id="scheduleBtn" class="quickBtn" type="button">Odat va diet kunlarini sozlash</button>
         <button id="addHabitBtn" class="quickBtn" type="button">Odat qo‘shish</button>
         <button id="addDietBtn" class="quickBtn" type="button">Diet qo‘shish</button>
         <button id="plansBtn" class="quickBtn" type="button">Plans</button>
-        <button id="moneyBtn" class="quickBtn" type="button">Money spending</button>
         <button id="calculateMoneyBtn" class="quickBtn" type="button">Calculate money</button>
+        <button id="notesBtn" class="quickBtn" type="button">Notes</button>
       </div>
     </div>
 
@@ -309,7 +319,7 @@ var PR=[["fajr","Bomdod","Fajr"],["dhuhr","Peshin","Dhuhr"],["asr","Asr","Asr"],
 var STATUS=[["unset","Belgilanmagan","unset"],["done","Bajarildi","done"],["late","Kechiktirib bajarildi","late"],["missed","Bajarilmadi","missed"]];
 var PSTATUS=[["unset","Belgilanmagan","unset"],["done","O‘qildi","done"],["late","Kechiktirib o‘qildi","late"],["missed","O‘qilmadi","missed"]];
 var DESIGN_DEFAULT={bg:"#07090d",panel:"#0e1218",surface:"#11161d",control:"#151b24",menuBg:"#0c1016",text:"#f4f7fb",muted:"#8f9aaa",accent:"#98ff6f",line:"#252c36",radius:22,fontSize:16,gap:12,shellMax:1600,calendarWidth:250,habitFlex:1.05,dietFlex:.62,todoFlex:.82,habitHeight:490,dietHeight:490,todoHeight:490,shadow:28,showSpending:true,showTime:true,showProgress:true,showCalendar:true,showHabits:true,showDiet:true,showTodo:true,showQuick:true,order:["calendar","habits","diet","todo"]};
-var DEFAULT={version:2,region:"Namangan",gymSchedule:[1,3,5],morningSchedule:[2,4,6],gymActivePeriods:[],morningActivePeriods:[],habits:[],diets:[],design:DESIGN_DEFAULT,dayData:{}};
+var DEFAULT={version:2,region:"Namangan",gymSchedule:[1,3,5],morningSchedule:[2,4,6],gymActivePeriods:[],morningActivePeriods:[],habits:[],diets:[],notes:[],design:DESIGN_DEFAULT,dayData:{}};
 var state=clone(DEFAULT),selected=start(new Date()),cursor=new Date(selected.getFullYear(),selected.getMonth(),1),prayerTimes=null,prayerToken=0;
 var currentUser=null,currentUsername="",cloudSaveTimer=null,cloudLoading=false,activeUserId=null,designDraft=null;
 
@@ -333,7 +343,7 @@ function normalizeState(x){
   if(!x||!(x.version===1||x.version===2)){
     var fresh=clone(DEFAULT);fresh.gymActivePeriods=[{start:today,end:null}];fresh.morningActivePeriods=[{start:today,end:null}];return fresh
   }
-  var s=Object.assign(clone(DEFAULT),x,{version:2,habits:Array.isArray(x.habits)?x.habits:[],diets:Array.isArray(x.diets)?x.diets:[],dayData:x.dayData||{}});s.design=normalizeDesign(x.design);
+  var s=Object.assign(clone(DEFAULT),x,{version:2,habits:Array.isArray(x.habits)?x.habits:[],diets:Array.isArray(x.diets)?x.diets:[],notes:Array.isArray(x.notes)?x.notes:[],dayData:x.dayData||{}});s.design=normalizeDesign(x.design);
   s.gymActivePeriods=normalizePeriods(s.gymActivePeriods,earliestCoreDate("gym",s.dayData)||today);
   s.morningActivePeriods=normalizePeriods(s.morningActivePeriods,earliestCoreDate("morning",s.dayData)||today);
   s.habits=s.habits.map(function(h){var created=h.createdAt||earliestItemDate(h.id,"habits",s.dayData)||today;return Object.assign({},h,{createdAt:created,schedule:Array.isArray(h.schedule)?h.schedule:[1,2,3,4,5,6,7],activePeriods:normalizePeriods(h.activePeriods,created)})});
@@ -627,6 +637,54 @@ function openCalculateMoneyModal(dateKey){
   q("calcMoneyDate").addEventListener("change",draw);
   draw()
 }
+
+function sortNotes(){
+  state.notes=(state.notes||[]).slice().sort(function(a,b){
+    var ad=String(a.date||""),bd=String(b.date||"");
+    if(ad!==bd)return bd.localeCompare(ad);
+    return String(b.updatedAt||b.createdAt||"").localeCompare(String(a.updatedAt||a.createdAt||""))
+  })
+}
+function openNotesModal(){
+  sortNotes();
+  openModal("Notes / Qaydnoma",'<div class="modalSection"><div class="formGrid"><div class="field"><label>Sana</label><input id="noteDate" class="input" type="date" value="'+key(selected)+'"></div><div class="field"><label>Sarlavha</label><input id="noteTitleInput" class="input" maxlength="100" placeholder="Masalan: Bugungi xulosam"></div></div><div class="field" style="margin-top:10px"><label>Qayd</label><textarea id="noteBodyInput" class="input noteTextarea" maxlength="5000" placeholder="Hayotingizdan olgan tajriba, fikr yoki xulosani yozing..."></textarea></div><div class="modalActions"><button id="saveNoteBtn" class="btn primary" type="button">Qaydni saqlash</button></div></div><div class="modalSection"><div class="sectionTitle">Qaydlarim</div><div id="notesList" class="notesList"></div></div>');
+  function draw(){
+    sortNotes();
+    var host=q("notesList");host.innerHTML="";
+    if(!state.notes.length){host.innerHTML='<div class="rowMeta">Hali qayd yozilmagan.</div>';return}
+    state.notes.forEach(function(n){
+      var card=document.createElement("div");card.className="noteCard";
+      card.innerHTML='<div class="noteHead"><div class="noteTitle"></div><div class="noteDate"></div></div><div class="noteBody"></div><div class="noteActions"><button class="btn editNote" type="button">Tahrirlash</button><button class="btn danger deleteNote" type="button">O‘chirish</button></div>';
+      card.querySelector(".noteTitle").textContent=n.title||"Qayd";
+      card.querySelector(".noteDate").textContent=n.date||"";
+      card.querySelector(".noteBody").textContent=n.body||"";
+      card.querySelector(".editNote").addEventListener("click",function(){openEditNoteModal(n)});
+      card.querySelector(".deleteNote").addEventListener("click",function(){if(!confirm("Bu qaydni o‘chirasizmi?"))return;state.notes=state.notes.filter(function(x){return x.id!==n.id});save();draw()});
+      host.appendChild(card)
+    })
+  }
+  q("saveNoteBtn").addEventListener("click",function(){
+    var date=q("noteDate").value,title=q("noteTitleInput").value.trim(),body=q("noteBodyInput").value.trim();
+    if(!date)return alert("Sanani tanlang.");
+    if(!body)return q("noteBodyInput").focus();
+    state.notes.push({id:uuid(),date:date,title:title,body:body,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+    q("noteTitleInput").value="";q("noteBodyInput").value="";
+    save();draw()
+  });
+  draw()
+}
+function openEditNoteModal(note){
+  openModal("Qaydni tahrirlash",'<div class="modalSection"><div class="formGrid"><div class="field"><label>Sana</label><input id="editNoteDate" class="input" type="date"></div><div class="field"><label>Sarlavha</label><input id="editNoteTitle" class="input" maxlength="100"></div></div><div class="field" style="margin-top:10px"><label>Qayd</label><textarea id="editNoteBody" class="input noteTextarea" maxlength="5000"></textarea></div><div class="modalActions"><button id="cancelEditNote" class="btn" type="button">Bekor qilish</button><button id="saveEditNote" class="btn primary" type="button">Saqlash</button></div></div>');
+  q("editNoteDate").value=note.date||key(selected);q("editNoteTitle").value=note.title||"";q("editNoteBody").value=note.body||"";
+  q("cancelEditNote").addEventListener("click",openNotesModal);
+  q("saveEditNote").addEventListener("click",function(){
+    var date=q("editNoteDate").value,body=q("editNoteBody").value.trim();
+    if(!date)return alert("Sanani tanlang.");
+    if(!body)return q("editNoteBody").focus();
+    note.date=date;note.title=q("editNoteTitle").value.trim();note.body=body;note.updatedAt=new Date().toISOString();
+    save();openNotesModal()
+  })
+}
 function openScheduleModal(){
   openModal("Odat va diet kunlarini sozlash",'<div class="modalSection"><div class="sectionTitle">Odatlar</div><div id="habitScheduleList" class="scheduleList"></div></div><div class="modalSection"><div class="sectionTitle">Diet</div><div id="dietScheduleList" class="scheduleList"></div></div>');
   function addRow(host,name,schedule,onChange){var row=document.createElement("div");row.className="scheduleItem";row.innerHTML='<div class="scheduleName"></div><div class="daysHost"></div>';row.querySelector(".scheduleName").textContent=name;row.querySelector(".daysHost").appendChild(daysEditor(schedule.slice(),function(n){onChange(n);save();openScheduleModal();renderAll(false)}));host.appendChild(row)}
@@ -707,6 +765,7 @@ q("addDietBtn").addEventListener("click",function(){openAddModal("diet")});
 q("plansBtn").addEventListener("click",function(){openPlansModal(key(selected))});
 q("moneyBtn").addEventListener("click",function(){openMoneyModal(key(selected))});
 q("calculateMoneyBtn").addEventListener("click",function(){openCalculateMoneyModal(key(selected))});
+q("notesBtn").addEventListener("click",openNotesModal);
 q("designBtn").addEventListener("click",function(){q("menu").classList.add("hidden");openDesignEditor()});
 q("statsBtn").addEventListener("click",function(){q("menu").classList.add("hidden");openStats()});
 q("modalClose").addEventListener("click",closeModal);
