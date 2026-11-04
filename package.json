@@ -1,0 +1,22 @@
+{
+  "name": "lock-in-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LOCK IN mobile wrapper",
+  "scripts": {
+    "mobile:prepare": "node scripts/build-mobile.mjs",
+    "cap:sync": "npm run mobile:prepare && npx cap sync",
+    "cap:add:android": "npm run mobile:prepare && npx cap add android",
+    "cap:add:ios": "npm run mobile:prepare && npx cap add ios",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/ios": "^8.0.0"
+  }
+}

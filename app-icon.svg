@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#98ff6f"/>
+  <rect x="28" y="28" width="456" height="456" rx="92" fill="none" stroke="#071007" stroke-width="18" opacity=".14"/>
+  <text x="256" y="310" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="190" font-weight="900" fill="#071007">LI</text>
+</svg>

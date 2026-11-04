@@ -2,8 +2,15 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080b10">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LOCK IN">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./app-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./app-icon.svg">
 <title>LOCK IN — Personal Discipline System</title>
 <meta name="description" content="LOCK IN — shaxsiy intizom, namoz, odatlar va diet kuzatuvchisi.">
 <style>
@@ -17,7 +24,8 @@
 }
 *{box-sizing:border-box}
 html{background:var(--bg)}
-body{margin:0;background:radial-gradient(circle at 16% 0,color-mix(in srgb,var(--accent) 6%,transparent),transparent 28%),var(--bg);color:var(--text);font-size:var(--base-font);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{margin:0;background:radial-gradient(circle at 16% 0,color-mix(in srgb,var(--accent) 6%,transparent),transparent 28%),var(--bg);color:var(--text);font-size:var(--base-font);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom)}
+@media(display-mode:standalone){body{overscroll-behavior:none}.shell{padding-top:max(10px,env(safe-area-inset-top));padding-bottom:max(24px,env(safe-area-inset-bottom))}}
 button,input,select{font:inherit;color:inherit}
 button{touch-action:manipulation}
 .hidden{display:none!important}
@@ -257,7 +265,7 @@ button{touch-action:manipulation}
     <div id="menuWrap" class="menuWrap"><button id="menuBtn" class="menuBtn" type="button" aria-label="Sozlamalar">⋮</button><div id="menu" class="menu hidden">
       <div class="menuSection"><div class="menuTitle">AKKAUNT</div><div id="menuUsername" class="menuUser">@user</div><div id="syncStatus" class="menuMuted">Cloud bilan sinxron</div></div>
       <div class="menuSection"><div class="menuTitle">NAMOZ HUDUDI</div><select id="regionSelect"></select></div>
-      <div class="menuSection"><button id="designBtn" class="menuAction" type="button">Edit layouts &amp; design</button><button id="statsBtn" class="menuAction" type="button">Statistikani ko‘rish</button><button id="logoutBtn" class="menuAction danger" type="button">Chiqish</button></div>
+      <div class="menuSection"><button id="installAppBtn" class="menuAction" type="button">Install LOCK IN app</button><button id="designBtn" class="menuAction" type="button">Edit layouts &amp; design</button><button id="statsBtn" class="menuAction" type="button">Statistikani ko‘rish</button><button id="logoutBtn" class="menuAction danger" type="button">Chiqish</button></div>
     </div></div>
   </header>
 
@@ -720,6 +728,31 @@ function clock(){
   q("liveClock").textContent=tf.format(now);q("liveDate").textContent=df.format(now)
 }
 
+
+var deferredInstallPrompt=null;
+function isStandaloneApp(){return window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true}
+function isIOSDevice(){return /iphone|ipad|ipod/i.test(navigator.userAgent)}
+function refreshInstallButton(){
+  var b=q("installAppBtn");if(!b)return;
+  b.textContent=isStandaloneApp()?"LOCK IN app o‘rnatilgan":"Install LOCK IN app";
+}
+async function openInstallApp(){
+  q("menu").classList.add("hidden");
+  if(isStandaloneApp()){
+    openModal("LOCK IN app",'<div class="modalSection"><div class="emptyState" style="min-height:150px"><div><strong style="font-size:18px">LOCK IN o‘rnatilgan</strong><br><br>Siz hozir app rejimidan foydalanyapsiz.</div></div></div>');
+    return
+  }
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    try{await deferredInstallPrompt.userChoice}catch(e){}
+    deferredInstallPrompt=null;refreshInstallButton();return
+  }
+  if(isIOSDevice()){
+    openModal("iPhone’ga o‘rnatish",'<div class="modalSection"><div style="line-height:1.7"><strong>Safari orqali o‘rnating:</strong><br><br>1. LOCK IN saytini <strong>Safari</strong>da oching.<br>2. <strong>Share</strong> tugmasini bosing.<br>3. <strong>Add to Home Screen</strong> ni tanlang.<br>4. <strong>Open as Web App</strong> yoqilgan bo‘lsin.<br>5. <strong>Add</strong> ni bosing.<br><br>Shundan keyin LOCK IN Home Screen’da alohida app kabi ochiladi.</div></div>');
+    return
+  }
+  openModal("App’ni o‘rnatish",'<div class="modalSection"><div style="line-height:1.7"><strong>Android / Chrome:</strong><br><br>Brauzer menyusidan <strong>Install app</strong> yoki <strong>Add to Home screen</strong> ni tanlang. Agar install taklifi hali chiqmasa, sahifani bir marta yangilang va qayta urinib ko‘ring.</div></div>')
+}
 function setAuthMessage(text,type){var el=q("authMessage");el.textContent=text||"";el.className="authMessage"+(text?" show "+(type||""):"")}
 function friendlyAuthError(error,prefix){
   var msg=error&&error.message?String(error.message):"Noma’lum xato";
@@ -766,6 +799,7 @@ q("plansBtn").addEventListener("click",function(){openPlansModal(key(selected))}
 q("moneyBtn").addEventListener("click",function(){openMoneyModal(key(selected))});
 q("calculateMoneyBtn").addEventListener("click",function(){openCalculateMoneyModal(key(selected))});
 q("notesBtn").addEventListener("click",openNotesModal);
+q("installAppBtn").addEventListener("click",openInstallApp);
 q("designBtn").addEventListener("click",function(){q("menu").classList.add("hidden");openDesignEditor()});
 q("statsBtn").addEventListener("click",function(){q("menu").classList.add("hidden");openStats()});
 q("modalClose").addEventListener("click",closeModal);
@@ -774,6 +808,10 @@ q("logoutBtn").addEventListener("click",function(){sb.auth.signOut()});
 q("loginTab").addEventListener("click",function(){showAuthMode("login")});
 q("registerTab").addEventListener("click",function(){showAuthMode("register")});
 q("loginForm").addEventListener("submit",doLogin);q("registerForm").addEventListener("submit",doRegister);q("resetForm").addEventListener("submit",doReset);q("forgotBtn").addEventListener("click",doForgot);
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferredInstallPrompt=e;refreshInstallButton()});
+window.addEventListener("appinstalled",function(){deferredInstallPrompt=null;refreshInstallButton()});
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})})}
+refreshInstallButton();
 clock();setInterval(clock,1000);initAuth();
 })();
 </script>
