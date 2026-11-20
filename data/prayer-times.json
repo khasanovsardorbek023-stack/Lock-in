@@ -1,7 +1,7 @@
 {
   "source": "namozvaqti.uz",
   "source_note": "Book Media Nashr taqvimi (namozvaqti.uz ko‘rsatgan manba)",
-  "updated_at": "2026-11-19T06:15:45.260057+05:00",
+  "updated_at": "2026-11-20T06:24:00.876974+05:00",
   "data": {
     "Toshkent shahri": {
       "2026-09-01": {
@@ -10225,5 +10225,20 @@
     }
   },
   "sync_month": "2026-11",
-  "errors": {}
+  "errors": {
+    "Toshkent shahri": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/toshkent",
+    "Toshkent viloyati": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/nurafshon",
+    "Andijon": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/andijon",
+    "Buxoro": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/buxoro",
+    "Farg‘ona": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/fargona",
+    "Jizzax": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/jizzax",
+    "Namangan": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/namangan",
+    "Navoiy": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/navoiy",
+    "Qashqadaryo": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/qarshi",
+    "Qoraqalpog‘iston": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/nukus",
+    "Samarqand": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/samarqand",
+    "Sirdaryo": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/guliston",
+    "Surxondaryo": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/termiz",
+    "Xorazm": "No monthly prayer rows found at https://namozvaqti.uz/oylik/11/urganch"
+  }
 }
